@@ -1,0 +1,71 @@
+body {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#addpe {background: #42BDE3;border: none;border-radius: 25px;padding: 10px;width: calc(100% - 80px);color: #fff;bottom:20px;position:absolute;left: 40px;text-align:center;}
+
+#app {
+    height: 100%;
+}
+
+.addp {
+    bottom: -800px;
+    position: absolute;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.25);
+    border-radius: 16px 16px 0px 0px;
+    z-index: 2;
+    width: 100%;
+    padding: 40px;
+    transition: bottom 0.3s ease-in;
+}
+
+.form-control {
+    background: #F6F6F6;
+    border: 1px solid grey;
+    border-radius: 25px;
+    padding: 10px;
+}
+
+
+.overlay {
+    display: none;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+}
+
+.overlayshow {
+    display: block;
+}
+
+.showaddform {
+    bottom: 1px;
+    transition: bottom 0.3s ease-in;
+
+}
+
+.closetxt {
+    width: 100%;
+    text-align: center;
+    color: #42BDE3;
+    text-align: center;
+    display: block;
+    margin-top: 15px;
+}
+
+
+#insertpeople {
+    background: #42BDE3;
+    border: none;
+    border-radius: 25px;
+    padding: 10px;
+    width: 100%;
+    color: #fff
+}

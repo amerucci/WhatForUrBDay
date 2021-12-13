@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{ title }}</h1>
+      <input type="text" id="search" v-bind:placeholder="searchplaceholder" />
+      <ul class="list-group">
+        <li v-for="birthday in birthdaylist" class="list-group-item">
+          <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
+          <span>{{ birthday.date }}</span>
+        </li>
+      </ul>
+      <div class="overlay" v-bind:class="{ overlayshow : showaddform } " v-on:click="showaddform = !showaddform"></div>
+      <div class="addp" v-bind:class="{ showaddform : showaddform } ">
+        <h2>Ajouter un anniversaire</h2>
+        <form>
+          <div class="form-group">
+            <label for="firstname">Prénom</label>
+            <input
+              type="text"
+              id="firstname"
+              class="form-control"
+              placeholder="Saisier un prénom"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="name">Nom</label>
+            <input
+              type="text"
+              id="name"
+              class="form-control"
+              placeholder="Saisier un nom"
+            />
+          </div>
+          <div class="form-group">
+            <label for="bdate">Date de naissance</label>
+            <input
+              type="date"
+              id="bdate"
+              placeholder="Saisier une date de naissance"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group">
+            <label for="picture">Date de naissance</label>
+            <input
+              type="url"
+              id="picture"
+              placeholder="Saisissez une photo"
+              class="form-control"
+            />
+          </div>
+
+          <button type="submit" id="insertpeople">
+            Ajouter
+          </button>
+          <span class="closetxt"  v-on:click="showaddform = !showaddform">Fermer</span>
+        </form>
+      </div>
+
+      <div id="addpe" v-on:click="showaddform = !showaddform">
+        Ajouter une personne
+      </div>
+    </div>
+
+    <script>
+      const content = new Vue({
+        el: "#app",
+        data: {
+          title: "Mes anniversaires",
+          searchplaceholder: "Rechercher une personne",
+          birthdaylist: [
+            { firstname: "Alain", lastname: "Merucci", date: "07/03/1985" },
+            { firstname: "Anais", lastname: "Bonin", date: "25/11/1990" },
+            { firstname: "Valentina", lastname: "Merucci", date: "01/10/2013" },
+            { firstname: "Paolo", lastname: "Merucci", date: "30/12/2019" },
+          ],
+          showaddform: false,
+        },
+      });
+    </script>
+  </body>
+</html>

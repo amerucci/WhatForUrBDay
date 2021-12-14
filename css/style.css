@@ -69,3 +69,50 @@ body {
     width: 100%;
     color: #fff
 }
+
+label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    margin-left: 15px;
+    font-weight: bold;
+}
+
+ul.list-group {
+    height: 50vh;
+    overflow-y: auto;
+}
+
+
+/* Details */
+.details {display: none;}
+.showdetails{    display: block;
+    height: 100vh;
+    top: 0;
+    position: absolute;
+    background: #fff;
+    width: 100%;
+    z-index: 3;}
+.headerdetail{
+    background: #42BDE3;
+    height:245px;
+    width:100%
+}
+
+.detailpicture{
+    position: absolute;
+    width: 158px;
+    height: 158px;
+    left: calc(50% - 158px/2 - 0.5px);
+    top: 128px;
+    border-radius: 50%;
+    border: 5px solid #FFF;
+    background: #fff;
+    box-shadow: 0px 2px 20px rgb(0 0 0 / 25%);
+}
+
+.detailpicture img{
+    object-fit: cover;
+    width: 100%;
+    border-radius: 50%;
+    height:100%
+}

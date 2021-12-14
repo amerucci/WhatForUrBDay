@@ -21,9 +21,10 @@
       <h1>{{ title }}</h1>
       <input type="text" id="search" class="form-control" v-bind:placeholder="searchplaceholder" />
       <ul class="list-group">
-        <li v-for="birthday in birthdaylist" class="list-group-item">
+        <li v-for="(birthday , index) in birthdaylist" @click="getinformations(index),showdetails = !showdetails" class="list-group-item" :key="index">
           <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
           <span>{{ birthday.date }}</span>
+          <i class="fas fa-ban animated bounceIn" v-on:click="deleteMember(index)">trash</i>
         </li>
       </ul>
       <div class="overlay" v-bind:class="{ overlayshow : showaddform } " v-on:click="showaddform = !showaddform"></div>
@@ -78,6 +79,21 @@
           <span class="closetxt"  v-on:click="showaddform = !showaddform">Fermer</span>
         </form>
       </div>
+      <!-- VUE DETAILS -->
+      <div class="details" v-bind:class="{ showdetails : showdetails } " v-for="(birthdaydetails) in birthdaydetails" >
+        <div class="headerdetail">
+          <span @click="showdetails = !showdetails, emptyArray()" >Back</span>
+          <span>Retour</span>
+        </div>
+        <div class="detailpicture">
+          <img :src="birthdaydetails.picture" />
+        </div>
+
+        
+        
+        <h2>{{ birthdaydetails.firstname }}</h2>
+        
+      </div>
 
       <div id="addpe" v-on:click="showaddform = !showaddform">
         Ajouter une personne
@@ -94,21 +110,50 @@
           lastname:'',
           date:'',
           picture:'',
+          choice:'',
           birthdaylist: [
-            { firstname: "Alain", lastname: "Merucci", date: "07/03/1985" },
-            { firstname: "Anais", lastname: "Bonin", date: "25/11/1990" },
-            { firstname: "Valentina", lastname: "Merucci", date: "01/10/2013" },
-            { firstname: "Paolo", lastname: "Merucci", date: "30/12/2019" },
+            { firstname: "Alain", lastname: "Merucci", date: "07/03/1985", picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.18169-9/c0.23.206.206a/p206x206/11407045_10153460687414382_4950241106672486360_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=da31f3&_nc_ohc=7wWSljZKjU4AX_dQM_b&_nc_ht=scontent-cdt1-1.xx&oh=00_AT-nX0CqpiA2gH4c1wysO-OBWLKIBDJqhYbNrc_kbahlJw&oe=61DD932C" },
+            { firstname: "Anais", lastname: "Bonin", date: "25/11/1990", picture:"https://scontent-cdg2-1.xx.fbcdn.net/v/t1.6435-9/c0.34.206.206a/p206x206/83073868_10157986467204382_4176350572846252032_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=da31f3&_nc_ohc=GpoisrtHcEEAX9Ox2nc&_nc_ht=scontent-cdg2-1.xx&oh=00_AT9ESaudgVNqY_f7nCzDRR4473SvsYbppLW_CWYeeHGIQg&oe=61DD15FC" },
+            { firstname: "Valentina", lastname: "Merucci", date: "01/10/2013", picture:"https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-9/p206x206/116551888_10158633824234382_7068094440975290584_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=da31f3&_nc_ohc=UOKikPJORU4AX98QB4f&tn=pCqHVaF89K2bhwYg&_nc_ht=scontent-cdt1-1.xx&oh=00_AT_0TeVHR6IYfyMm_0LP2Pcl4YUtFqEpXSxDRJXHt4lTIA&oe=61DF20E9" },
+            { firstname: "Paolo", lastname: "Merucci", date: "30/12/2019", picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-9/170408186_10223759590391271_1331194073963531623_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=730e14&_nc_ohc=NoM6kNIZ8ZMAX8yfn3S&_nc_ht=scontent-cdt1-1.xx&oh=00_AT-KrlYO8QcwFzlsS2fy93m1roKDpIjcB-ZcyxuGc18Syg&oe=61DE2B94" },
+            { firstname: "Bianca", lastname: "Merucci", date: "01/10/2013" },
+            { firstname: "Alessando", lastname: "Merucci", date: "30/12/2019" },
+            { firstname: "Laurent", lastname: "Bonin", date: "25/11/1990" },
+            { firstname: "Véronique", lastname: "Lamblin", date: "25/11/1990" },
+            { firstname: "Chloé", lastname: "Bonin", date: "25/11/1990" },
+            { firstname: "Rose", lastname: "Bonin", date: "25/11/1990" },
           ],
+          birthdaydetails:[],
           showaddform: false,
+          showdetails:false,
         },
         methods:{
           addamemember : function(){
-            this.birthdaylist.push( { firstname: this.firstname, lastname: this.lastname, date: this.date })
+            this.birthdaylist.push( { firstname: this.firstname, lastname: this.lastname, date: this.date, picture: this.picture })
             console.log("un membre a été ajouté");
             localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
-            this.showaddform = false
-          }
+            this.showaddform = false,
+
+            this.firstname = '',
+            this.lastname = '',
+            this.date = '',
+            this.picture = ''
+          }, 
+          //On supprime l'élement sur lequel on a cliqué grâce à la récupération de l'index
+        deleteMember(who) {
+            this.birthdaylist.splice(who, 1)
+            // On met à jour le localStorage
+            localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
+           
+        },
+        getinformations:function(who){
+          this.choice=who
+          this.birthdaydetails.push({firstname: this.birthdaylist[who].firstname, lastname: this.birthdaylist[who].lastname, date: this.birthdaylist[who].date, picture: this.birthdaylist[who].picture})
+          
+        }, 
+        emptyArray:function(){
+        this.birthdaydetails.pop()
+        },
         },
         mounted(){
           if (localStorage.getItem('birthdaylist'))

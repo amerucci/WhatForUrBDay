@@ -19,7 +19,7 @@
   <body>
     <div id="app">
       <h1>{{ title }}</h1>
-      <input type="text" id="search" v-bind:placeholder="searchplaceholder" />
+      <input type="text" id="search" class="form-control" v-bind:placeholder="searchplaceholder" />
       <ul class="list-group">
         <li v-for="birthday in birthdaylist" class="list-group-item">
           <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
@@ -29,10 +29,11 @@
       <div class="overlay" v-bind:class="{ overlayshow : showaddform } " v-on:click="showaddform = !showaddform"></div>
       <div class="addp" v-bind:class="{ showaddform : showaddform } ">
         <h2>Ajouter un anniversaire</h2>
-        <form>
+        <form v-on:submit.prevent>
           <div class="form-group">
             <label for="firstname">Prénom</label>
             <input
+            v-model="firstname"
               type="text"
               id="firstname"
               class="form-control"
@@ -43,6 +44,7 @@
           <div class="form-group">
             <label for="name">Nom</label>
             <input
+              v-model="lastname"
               type="text"
               id="name"
               class="form-control"
@@ -52,6 +54,7 @@
           <div class="form-group">
             <label for="bdate">Date de naissance</label>
             <input
+            v-model="date"
               type="date"
               id="bdate"
               placeholder="Saisier une date de naissance"
@@ -61,6 +64,7 @@
           <div class="form-group">
             <label for="picture">Date de naissance</label>
             <input
+            v-model="picture"
               type="url"
               id="picture"
               placeholder="Saisissez une photo"
@@ -68,7 +72,7 @@
             />
           </div>
 
-          <button type="submit" id="insertpeople">
+          <button type="submit" id="insertpeople" v-on:click="addamemember">
             Ajouter
           </button>
           <span class="closetxt"  v-on:click="showaddform = !showaddform">Fermer</span>
@@ -86,6 +90,10 @@
         data: {
           title: "Mes anniversaires",
           searchplaceholder: "Rechercher une personne",
+          firstname:'',
+          lastname:'',
+          date:'',
+          picture:'',
           birthdaylist: [
             { firstname: "Alain", lastname: "Merucci", date: "07/03/1985" },
             { firstname: "Anais", lastname: "Bonin", date: "25/11/1990" },
@@ -94,6 +102,18 @@
           ],
           showaddform: false,
         },
+        methods:{
+          addamemember : function(){
+            this.birthdaylist.push( { firstname: this.firstname, lastname: this.lastname, date: this.date })
+            console.log("un membre a été ajouté");
+            localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
+            this.showaddform = false
+          }
+        },
+        mounted(){
+          if (localStorage.getItem('birthdaylist'))
+            this.birthdaylist = JSON.parse(localStorage.getItem('birthdaylist'));
+        }
       });
     </script>
   </body>

@@ -6,9 +6,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>What for Ur B-Day</title>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-
-  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
   <link rel="stylesheet" href="./css/style.css" />
@@ -17,16 +17,23 @@
 <body>
   <div id="app" v-bind:class="{moveleft : showdetails}">
     <h1>{{ title }}</h1>
-    <input type="text" id="search" class="form-control" v-bind:placeholder="searchplaceholder" />
+    <input type="text" id="search" class="form-control my-4" v-bind:placeholder="searchplaceholder" />
     <ul class="list-group">
       <li v-for="(birthday , index) in birthdaylist" @click="getinformations(index),showdetails = !showdetails"
-        class="list-group-item" :key="index">
-      
-
+        class="listp" :key="index">
+        <div class="listimg">
           <img :src="birthday.picture" />
+        </div>
+        <div class="userinfo">
+          <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
+          <span>{{ birthday.date }}</span>
+        </div>
+        <div class="dayleft">
+2
+        </div>
+         
      
-        <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
-        <span>{{ birthday.date }}</span>
+       
        
       </li>
     </ul>
@@ -79,9 +86,19 @@
       <div>
         <div class="headerdetail">
           <div class="headerdetailinfos">
-            <span class="back" @click="showdetails = !showdetails, reset()">Retour</span>
-            <span>Profile</span>
-            <span style="float:right"> <i class="fas fa-ban animated bounceIn" v-on:click="deleteMember(), showdetails = !showdetails, reset()">trash</i></span>
+            <span class="back" @click="showdetails = !showdetails, reset()"><span class="material-icons">
+              arrow_back_ios_new
+              </span>Retour</span>
+           
+            <span style="float:right; margin-right:20px"> 
+              
+              <span class="material-icons"v-on:click="deleteMember(), showdetails = !showdetails, reset()">
+                delete_outline
+                </span>
+
+            
+              
+              </span>
           </div>
 
         </div>
@@ -122,7 +139,7 @@
         v-on:click="showaddformgift = !showaddformgift"></div>
 
 
-      <!-- <div class="addp" v-bind:class="{ showaddform : showaddformgift } ">
+     <div class="addp" v-bind:class="{ showaddform : showaddformgift } ">
         <h2>Ajouter un cadeau</h2>
         <form v-on:submit.prevent>
           <div class="form-group">
@@ -141,7 +158,7 @@
           </button>
           <span class="closetxt" v-on:click="showaddformgift = !showaddformgift">Fermer</span>
         </form>
-      </div> -->
+      </div> 
 
 
     </div>
@@ -289,6 +306,7 @@
         //On supprime l'élement sur lequel on a cliqué grâce à la récupération de l'index
         deleteMember() {
           who = this.choice
+          //alert (who)
           this.birthdaylist.splice(who, 1)
           // On met à jour le localStorage
           localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
@@ -301,6 +319,7 @@
             this.date = this.birthdaylist[who].date,
             this.picture = this.birthdaylist[who].picture
             this.birthdaygift = this.birthdaylist[who].cadeau
+            this.choice = who
             
 
         },

@@ -1,165 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>What for Ur B-Day</title>
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
 
-    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="./css/style.css" />
-  </head>
-  <body>
-    <div id="app">
-      <h1>{{ title }}</h1>
-      <input type="text" id="search" class="form-control" v-bind:placeholder="searchplaceholder" />
-      <ul class="list-group">
-        <li v-for="(birthday , index) in birthdaylist" @click="getinformations(index),showdetails = !showdetails" class="list-group-item" :key="index">
-          <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
-          <span>{{ birthday.date }}</span>
-          <i class="fas fa-ban animated bounceIn" v-on:click="deleteMember(index)">trash</i>
-        </li>
-      </ul>
-      <div class="overlay" v-bind:class="{ overlayshow : showaddform } " v-on:click="showaddform = !showaddform"></div>
-      <div class="addp" v-bind:class="{ showaddform : showaddform } ">
-        <h2>Ajouter un anniversaire</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What for Ur B-Day</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+  <div id="app" v-bind:class="{moveleft : showdetails}">
+    <h1>{{ title }}</h1>
+    <input type="text" id="search" class="form-control" v-bind:placeholder="searchplaceholder" />
+    <ul class="list-group">
+      <li v-for="(birthday , index) in birthdaylist" @click="getinformations(index),showdetails = !showdetails"
+        class="list-group-item" :key="index">
+      
+
+          <img :src="birthday.picture" />
+     
+        <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
+        <span>{{ birthday.date }}</span>
+       
+      </li>
+    </ul>
+
+    <!-- VUE AJOUT ANNIVERSAIRE -->
+    <div class="overlay" v-bind:class="{ overlayshow : showaddform } " v-on:click="showaddform = !showaddform"></div>
+
+
+    <div class="addp" v-bind:class="{ showaddform : showaddform } ">
+      <h2>Ajouter un anniversaire</h2>
+      <form v-on:submit.prevent>
+        <div class="form-group">
+          <label for="firstname">Prénom</label>
+          <input v-model="firstname" type="text" id="firstname" class="form-control" placeholder="Saisier un prénom" />
+        </div>
+
+        <div class="form-group">
+          <label for="name">Nom</label>
+          <input v-model="lastname" type="text" id="name" class="form-control" placeholder="Saisier un nom" />
+        </div>
+        <div class="form-group">
+          <label for="bdate">Date de naissance</label>
+          <input v-model="date" type="date" id="bdate" placeholder="Saisier une date de naissance"
+            class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="picture">Photo</label>
+          <input
+          type="file"
+          style="display: none"
+          @change="onFileSelected"
+          ref="fileInput"
+          id="toto"
+        />
+        <button @click="$refs.fileInput.click()" expand="full"
+          >Choisir une image</button
+        >
+        </div>
+
+        <button type="submit" id="insertpeople" v-on:click="addamemember">
+          Ajouter
+        </button>
+        <span class="closetxt" v-on:click="showaddform = !showaddform">Fermer</span>
+      </form>
+    </div>
+
+
+    <!-- VUE DETAILS -->
+    <div class="details" v-bind:class="{ showdetails : showdetails } ">
+      <div>
+        <div class="headerdetail">
+          <div class="headerdetailinfos">
+            <span class="back" @click="showdetails = !showdetails, reset()">Retour</span>
+            <span>Profile</span>
+            <span style="float:right"> <i class="fas fa-ban animated bounceIn" v-on:click="deleteMember(), showdetails = !showdetails, reset()">trash</i></span>
+          </div>
+
+        </div>
+        <div class="detailpicture">
+
+          <img :src="picture" />
+        </div>
+
+
+        <div class="detailbody">
+          
+          <h2>{{ firstname }} {{ lastname }}</h2>
+          <span>{{ date }} </span>
+  
+          <input v-model="whatsearch" type="text" id="search" class="form-control searchgift" placeholder="Rechercher un cadeau" />
+
+          <ul class="list-group">
+            <li v-for="gift in filteredList" class="giftli">
+              <span class="dot"></span><span class="giftname">{{ gift.cadeau }} </span><span class="giftdate">{{ gift.date }}</span>
+            </li>
+          </ul>
+
+        </div>
+
+
+
+        <div class="overlay"></div>
+
+
+        <div id="addgift" v-on:click="showaddformgift = !showaddformgift">
+          Ajouter un cadeau
+        </div>
+      </div>
+
+
+      <!-- VUE AJOUT CADEAU -->
+      <div class="overlay" v-bind:class="{ overlayshow : showaddformgift } "
+        v-on:click="showaddformgift = !showaddformgift"></div>
+
+
+      <!-- <div class="addp" v-bind:class="{ showaddform : showaddformgift } ">
+        <h2>Ajouter un cadeau</h2>
         <form v-on:submit.prevent>
           <div class="form-group">
-            <label for="firstname">Prénom</label>
-            <input
-            v-model="firstname"
-              type="text"
-              id="firstname"
-              class="form-control"
-              placeholder="Saisier un prénom"
-            />
+            <label for="year">Année</label>
+            <input v-model="year" type="date" id="year" class="form-control" placeholder="Choisissez une date" />
           </div>
 
           <div class="form-group">
-            <label for="name">Nom</label>
-            <input
-              v-model="lastname"
-              type="text"
-              id="name"
-              class="form-control"
-              placeholder="Saisier un nom"
-            />
+            <label for="gift">Cadeau</label>
+            <input v-model="gift" type="text" id="gift" class="form-control" placeholder="Saisier un nom" />
           </div>
-          <div class="form-group">
-            <label for="bdate">Date de naissance</label>
-            <input
-            v-model="date"
-              type="date"
-              id="bdate"
-              placeholder="Saisier une date de naissance"
-              class="form-control"
-            />
-          </div>
-          <div class="form-group">
-            <label for="picture">Date de naissance</label>
-            <input
-            v-model="picture"
-              type="url"
-              id="picture"
-              placeholder="Saisissez une photo"
-              class="form-control"
-            />
-          </div>
+
 
           <button type="submit" id="insertpeople" v-on:click="addamemember">
             Ajouter
           </button>
-          <span class="closetxt"  v-on:click="showaddform = !showaddform">Fermer</span>
+          <span class="closetxt" v-on:click="showaddformgift = !showaddformgift">Fermer</span>
         </form>
-      </div>
-      <!-- VUE DETAILS -->
-      <div class="details" v-bind:class="{ showdetails : showdetails } " v-for="(birthdaydetails) in birthdaydetails" >
-        <div class="headerdetail">
-          <span @click="showdetails = !showdetails, emptyArray()" >Back</span>
-          <span>Retour</span>
-        </div>
-        <div class="detailpicture">
-          <img :src="birthdaydetails.picture" />
-        </div>
+      </div> -->
 
-        
-        
-        <h2>{{ birthdaydetails.firstname }}</h2>
-        
-      </div>
 
-      <div id="addpe" v-on:click="showaddform = !showaddform">
-        Ajouter une personne
-      </div>
     </div>
 
-    <script>
-      const content = new Vue({
-        el: "#app",
-        data: {
-          title: "Mes anniversaires",
-          searchplaceholder: "Rechercher une personne",
-          firstname:'',
-          lastname:'',
-          date:'',
-          picture:'',
-          choice:'',
-          birthdaylist: [
-            { firstname: "Alain", lastname: "Merucci", date: "07/03/1985", picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.18169-9/c0.23.206.206a/p206x206/11407045_10153460687414382_4950241106672486360_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=da31f3&_nc_ohc=7wWSljZKjU4AX_dQM_b&_nc_ht=scontent-cdt1-1.xx&oh=00_AT-nX0CqpiA2gH4c1wysO-OBWLKIBDJqhYbNrc_kbahlJw&oe=61DD932C" },
-            { firstname: "Anais", lastname: "Bonin", date: "25/11/1990", picture:"https://scontent-cdg2-1.xx.fbcdn.net/v/t1.6435-9/c0.34.206.206a/p206x206/83073868_10157986467204382_4176350572846252032_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=da31f3&_nc_ohc=GpoisrtHcEEAX9Ox2nc&_nc_ht=scontent-cdg2-1.xx&oh=00_AT9ESaudgVNqY_f7nCzDRR4473SvsYbppLW_CWYeeHGIQg&oe=61DD15FC" },
-            { firstname: "Valentina", lastname: "Merucci", date: "01/10/2013", picture:"https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-9/p206x206/116551888_10158633824234382_7068094440975290584_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=da31f3&_nc_ohc=UOKikPJORU4AX98QB4f&tn=pCqHVaF89K2bhwYg&_nc_ht=scontent-cdt1-1.xx&oh=00_AT_0TeVHR6IYfyMm_0LP2Pcl4YUtFqEpXSxDRJXHt4lTIA&oe=61DF20E9" },
-            { firstname: "Paolo", lastname: "Merucci", date: "30/12/2019", picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-9/170408186_10223759590391271_1331194073963531623_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=730e14&_nc_ohc=NoM6kNIZ8ZMAX8yfn3S&_nc_ht=scontent-cdt1-1.xx&oh=00_AT-KrlYO8QcwFzlsS2fy93m1roKDpIjcB-ZcyxuGc18Syg&oe=61DE2B94" },
-            { firstname: "Bianca", lastname: "Merucci", date: "01/10/2013" },
-            { firstname: "Alessando", lastname: "Merucci", date: "30/12/2019" },
-            { firstname: "Laurent", lastname: "Bonin", date: "25/11/1990" },
-            { firstname: "Véronique", lastname: "Lamblin", date: "25/11/1990" },
-            { firstname: "Chloé", lastname: "Bonin", date: "25/11/1990" },
-            { firstname: "Rose", lastname: "Bonin", date: "25/11/1990" },
-          ],
-          birthdaydetails:[],
-          showaddform: false,
-          showdetails:false,
-        },
-        methods:{
-          addamemember : function(){
-            this.birthdaylist.push( { firstname: this.firstname, lastname: this.lastname, date: this.date, picture: this.picture })
-            console.log("un membre a été ajouté");
-            localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
-            this.showaddform = false,
+    <div id="addpe" v-on:click="showaddform = !showaddform">
+      Ajouter une personne
+    </div>
+  </div>
+
+  <script>
+    const content = new Vue({
+      el: "#app",
+      data: {
+        title: "Mes anniversaires",
+        searchplaceholder: "Rechercher une personne",
+        firstname: '',
+        lastname: '',
+        date: '',
+        picture: '',
+        choice: '',
+        whatsearch:'',
+        birthdaygift:[],
+        birthdaylist: [{
+            firstname: "Alain",
+            lastname: "Merucci",
+            date: "07/03/1985",
+            picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.18169-9/c0.23.206.206a/p206x206/11407045_10153460687414382_4950241106672486360_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=da31f3&_nc_ohc=7wWSljZKjU4AX_dQM_b&_nc_ht=scontent-cdt1-1.xx&oh=00_AT-nX0CqpiA2gH4c1wysO-OBWLKIBDJqhYbNrc_kbahlJw&oe=61DD932C",
+            cadeau : [
+              {
+                date : "2022",
+                cadeau : "Voiture"
+              },
+              {
+                date : "2022",
+                cadeau : "PS5"
+              },
+              {
+                date : "2022",
+                cadeau : "PS5"
+              },
+              {
+                date : "2022",
+                cadeau : "PS5"
+              },
+              {
+                date : "2022",
+                cadeau : "PS5"
+              }
+            ]
+          },
+          {
+            firstname: "Anais",
+            lastname: "Bonin",
+            date: "25/11/1990",
+            picture: "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.6435-9/c0.34.206.206a/p206x206/83073868_10157986467204382_4176350572846252032_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=da31f3&_nc_ohc=GpoisrtHcEEAX9Ox2nc&_nc_ht=scontent-cdg2-1.xx&oh=00_AT9ESaudgVNqY_f7nCzDRR4473SvsYbppLW_CWYeeHGIQg&oe=61DD15FC"
+          },
+          {
+            firstname: "Valentina",
+            lastname: "Merucci",
+            date: "01/10/2013",
+            picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-9/p206x206/116551888_10158633824234382_7068094440975290584_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=da31f3&_nc_ohc=UOKikPJORU4AX98QB4f&tn=pCqHVaF89K2bhwYg&_nc_ht=scontent-cdt1-1.xx&oh=00_AT_0TeVHR6IYfyMm_0LP2Pcl4YUtFqEpXSxDRJXHt4lTIA&oe=61DF20E9"
+          },
+          {
+            firstname: "Paolo",
+            lastname: "Merucci",
+            date: "30/12/2019",
+            picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-9/170408186_10223759590391271_1331194073963531623_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=730e14&_nc_ohc=NoM6kNIZ8ZMAX8yfn3S&_nc_ht=scontent-cdt1-1.xx&oh=00_AT-KrlYO8QcwFzlsS2fy93m1roKDpIjcB-ZcyxuGc18Syg&oe=61DE2B94"
+          },
+          {
+            firstname: "Bianca",
+            lastname: "Merucci",
+            date: "01/10/2013",
+            cadeau : [
+              {
+                date : "2022",
+                cadeau : "doudou"
+              }
+            ]
+          },
+          {
+            firstname: "Alessando",
+            lastname: "Merucci",
+            date: "30/12/2019"
+          },
+          {
+            firstname: "Laurent",
+            lastname: "Bonin",
+            date: "25/11/1990"
+          },
+          {
+            firstname: "Véronique",
+            lastname: "Lamblin",
+            date: "25/11/1990"
+          },
+          {
+            firstname: "Chloé",
+            lastname: "Bonin",
+            date: "25/11/1990"
+          },
+          {
+            firstname: "Rose",
+            lastname: "Bonin",
+            date: "25/11/1990"
+          },
+        ],
+        
+        showaddform: false,
+        showdetails: false,
+        showaddformgift: false
+      },
+      
+      methods: {
+        onFileSelected(event) {
+	
+      
+		
+  let reader = new FileReader();
+  reader.onload = function () {
+    localStorage.setItem("images", JSON.stringify(reader.result));
+  };
+  if (event.target.files[0]) {
+    reader.readAsDataURL(event.target.files[0]);
+    localStorage.removeItem("images");
+  }
+},
+
+
+        addamemember: function () {
+          this.birthdaylist.push({
+            firstname: this.firstname,
+            lastname: this.lastname,
+            date: this.date,
+            picture: JSON.parse(localStorage.getItem("images")),
+          })
+          console.log("un membre a été ajouté");
+          localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
+          this.showaddform = false,
 
             this.firstname = '',
             this.lastname = '',
             this.date = '',
             this.picture = ''
-          }, 
-          //On supprime l'élement sur lequel on a cliqué grâce à la récupération de l'index
-        deleteMember(who) {
-            this.birthdaylist.splice(who, 1)
-            // On met à jour le localStorage
-            localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
-           
+            localStorage.removeItem("images");
         },
-        getinformations:function(who){
-          this.choice=who
-          this.birthdaydetails.push({firstname: this.birthdaylist[who].firstname, lastname: this.birthdaylist[who].lastname, date: this.birthdaylist[who].date, picture: this.birthdaylist[who].picture})
-          
-        }, 
-        emptyArray:function(){
-        this.birthdaydetails.pop()
+        //On supprime l'élement sur lequel on a cliqué grâce à la récupération de l'index
+        deleteMember() {
+          who = this.choice
+          this.birthdaylist.splice(who, 1)
+          // On met à jour le localStorage
+          localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
+
         },
+
+        getinformations: function (who) {
+            this.firstname = this.birthdaylist[who].firstname,
+            this.lastname = this.birthdaylist[who].lastname,
+            this.date = this.birthdaylist[who].date,
+            this.picture = this.birthdaylist[who].picture
+            this.birthdaygift = this.birthdaylist[who].cadeau
+            
+
         },
-        mounted(){
-          if (localStorage.getItem('birthdaylist'))
-            this.birthdaylist = JSON.parse(localStorage.getItem('birthdaylist'));
+        emptyArray: function () {
+          this.birthdaydetails.pop()
+        },
+
+        reset: function () {
+          this.firstname = '',
+            this.lastname = '',
+            this.date = '',
+            this.picture = ''
         }
-      });
-    </script>
-  </body>
+      },
+      mounted() {
+        if (localStorage.getItem('birthdaylist'))
+          this.birthdaylist = JSON.parse(localStorage.getItem('birthdaylist'));
+      },
+      computed:{
+        filteredList() {
+          if (this.whatsearch != "") {
+        return this.birthdaygift.filter((gifts) => {
+          return gifts.cadeau 
+            .toLowerCase()
+            .includes(this.whatsearch.toLowerCase());
+        });
+      }else{
+        return this.birthdaygift
+      }
+        }
+      }
+    });
+  </script>
+</body>
+
 </html>

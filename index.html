@@ -15,157 +15,158 @@
 
 <body>
   <div id="appcontent">
-  <div id="app" v-bind:class="{moveleft : showdetails}">
-    <h1>{{ title }}</h1>
-    <input v-model="whosearch" type="text" id="search" class="form-control my-4"
-      v-bind:placeholder="searchplaceholder" />
-    <ul class="list-group-home">
+    <div id="app" v-bind:class="{moveleft : showdetails}">
+      <h1>{{ title }}</h1>
+      <input v-model="whosearch" type="text" id="search" class="form-control my-4"
+        v-bind:placeholder="searchplaceholder" />
+      <ul class="list-group-home">
 
-      <li v-for="(birthday , index) in filteredListPeople"
-        @click="getinformations(birthday.id),showdetails = !showdetails" class="listp" :key="birthday.id">
-        <div class="listimg">
-          <img :src="birthday.picture" />
-        </div>
-        <div class="userinfo">
-          <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
-          <span>{{ birthday.date }}</span>
-        </div>
-        <div class="dayleft">
-          2
-        </div>
-
-
-
-
-      </li>
-    </ul>
-
-    <!-- VUE AJOUT ANNIVERSAIRE -->
-    <div class="overlay" v-bind:class="{ overlayshow : showaddform } " v-on:click="showaddform = !showaddform"></div>
-
-
-    <div class="addp" v-bind:class="{ showaddform : showaddform } ">
-      <h2>Ajouter un anniversaire</h2>
-      <form v-on:submit.prevent>
-        <div class="form-group">
-          <label for="firstname">Prénom</label>
-          <input v-model="firstname" type="text" id="firstname" class="form-control" placeholder="Saisier un prénom" />
-        </div>
-
-        <div class="form-group">
-          <label for="name">Nom</label>
-          <input v-model="lastname" type="text" id="name" class="form-control" placeholder="Saisier un nom" />
-        </div>
-        <div class="form-group">
-          <label for="bdate">Date de naissance</label>
-          <input v-model="date" type="date" id="bdate" placeholder="Saisier une date de naissance"
-            class="form-control" />
-        </div>
-        <div class="form-group">
-          <label for="picture">Photo</label>
-          <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" id="toto" />
-          <button @click="$refs.fileInput.click()" expand="full" id="picture">Choisir une image</button>
-        </div>
-
-        <button type="submit" id="insertpeople" v-on:click="addamemember">
-          Ajouter
-        </button>
-        <span class="closetxt" v-on:click="showaddform = !showaddform">Fermer</span>
-      </form>
-    </div>
-
-
-    <!-- VUE DETAILS -->
-    <div class="details" v-bind:class="{ showdetails : showdetails } ">
-      <div>
-        <div class="headerdetail">
-          <div class="headerdetailinfos">
-            <span class="back" @click="showdetails = !showdetails, reset()"><span class="material-icons">
-                arrow_back_ios_new
-              </span>Retour</span>
-
-            <span style="float:right; margin-right:20px">
-
-              <span class="material-icons" v-on:click="deleteMember(), showdetails = !showdetails, reset()">
-                delete_outline
-              </span>
-
-
-
-            </span>
+        <li v-for="(birthday , index) in filteredListPeople"
+          @click="getinformations(birthday.id),showdetails = !showdetails" class="listp" :key="birthday.id">
+          <div class="listimg">
+            <img :src="birthday.picture" />
+          </div>
+          <div class="userinfo">
+            <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
+            <span>{{ birthday.date }}</span>
+          </div>
+          <div class="dayleft">
+            {{ birthday.dateleft}}
           </div>
 
-        </div>
-        <div class="detailpicture">
-
-          <img :src="picture" />
-        </div>
-
-
-        <div class="detailbody">
-
-          <h2>{{ firstname }} {{ lastname }}</h2>
-          <span>{{ date }} </span>
-
-          <input v-model="whatsearch" type="text" id="search" class="form-control searchgift"
-            placeholder="Rechercher un cadeau" />
-
-          <ul class="list-group">
-            <li v-for="gift in filteredList" class="giftli">
-              <span class="dot"></span><span class="giftname">{{ gift.gift }} </span><span
-                class="giftdate">{{ gift.date }}</span>
-            </li>
-          </ul>
-
-        </div>
 
 
 
-        <div class="overlay"></div>
+        </li>
+      </ul>
+
+      <!-- VUE AJOUT ANNIVERSAIRE -->
+      <div class="overlay" v-bind:class="{ overlayshow : showaddform } " v-on:click="showaddform = !showaddform"></div>
 
 
-        <div id="addgift" v-on:click="showaddformgift = !showaddformgift">
-          Ajouter un cadeau
-        </div>
-      </div>
-
-
-      <!-- VUE AJOUT CADEAU -->
-      <div class="overlay" v-bind:class="{ overlayshow : showaddformgift } "
-        v-on:click="showaddformgift = !showaddformgift"></div>
-
-
-      <div class="addp" v-bind:class="{ showaddform : showaddformgift } ">
-        <h2>Ajouter un cadeau</h2>
+      <div class="addp" v-bind:class="{ showaddform : showaddform } ">
+        <h2>Ajouter un anniversaire</h2>
         <form v-on:submit.prevent>
           <div class="form-group">
-            <label for="year">Année</label>
-            <select v-model="year" class="form-control" id="year">
-
-              <option v-for="year in years">{{ year.date}}</option>
-            </select>
+            <label for="firstname">Prénom</label>
+            <input v-model="firstname" type="text" id="firstname" class="form-control"
+              placeholder="Saisier un prénom" />
           </div>
 
           <div class="form-group">
-            <label for="gift">Cadeau</label>
-            <input v-model="gift" type="text" id="gift" class="form-control" placeholder="Saisier un nom" />
+            <label for="name">Nom</label>
+            <input v-model="lastname" type="text" id="name" class="form-control" placeholder="Saisier un nom" />
+          </div>
+          <div class="form-group">
+            <label for="bdate">Date de naissance</label>
+            <input v-model="date" type="date" id="bdate" placeholder="Saisier une date de naissance"
+              class="form-control" />
+          </div>
+          <div class="form-group">
+            <label for="picture">Photo</label>
+            <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" id="toto" />
+            <button @click="$refs.fileInput.click()" expand="full" id="picture">Choisir une image</button>
           </div>
 
-
-          <button type="submit" id="insertpeople" v-on:click="addagift">
+          <button type="submit" id="insertpeople" v-on:click="addamemember">
             Ajouter
           </button>
-          <span class="closetxt" v-on:click="showaddformgift = !showaddformgift">Fermer</span>
+          <span class="closetxt" v-on:click="showaddform = !showaddform">Fermer</span>
         </form>
       </div>
 
 
-    </div>
+      <!-- VUE DETAILS -->
+      <div class="details" v-bind:class="{ showdetails : showdetails } ">
+        <div>
+          <div class="headerdetail">
+            <div class="headerdetailinfos">
+              <span class="back" @click="showdetails = !showdetails, reset()"><span class="material-icons">
+                  arrow_back_ios_new
+                </span>Retour</span>
 
-    <div id="addpe" v-on:click="showaddform = !showaddform">
-      Ajouter une personne
+              <span style="float:right; margin-right:20px">
+
+                <span class="material-icons" v-on:click="deleteMember(), showdetails = !showdetails, reset()">
+                  delete_outline
+                </span>
+
+
+
+              </span>
+            </div>
+
+          </div>
+          <div class="detailpicture">
+
+            <img :src="picture" />
+          </div>
+
+
+          <div class="detailbody">
+
+            <h2>{{ firstname }} {{ lastname }}</h2>
+            <span>{{ date }} </span>
+
+            <input v-model="whatsearch" type="text" id="search" class="form-control searchgift"
+              placeholder="Rechercher un cadeau" />
+
+            <ul class="list-group">
+              <li v-for="gift in filteredList" class="giftli">
+                <span class="dot"></span><span class="giftname">{{ gift.gift }} </span><span
+                  class="giftdate">{{ gift.date }}</span>
+              </li>
+            </ul>
+
+          </div>
+
+
+
+          <div class="overlay"></div>
+
+
+          <div id="addgift" v-on:click="showaddformgift = !showaddformgift">
+            Ajouter un cadeau
+          </div>
+        </div>
+
+
+        <!-- VUE AJOUT CADEAU -->
+        <div class="overlay" v-bind:class="{ overlayshow : showaddformgift } "
+          v-on:click="showaddformgift = !showaddformgift"></div>
+
+
+        <div class="addp" v-bind:class="{ showaddform : showaddformgift } ">
+          <h2>Ajouter un cadeau</h2>
+          <form v-on:submit.prevent>
+            <div class="form-group">
+              <label for="year">Année</label>
+              <select v-model="year" class="form-control" id="year">
+
+                <option v-for="year in years">{{ year.date}}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="gift">Cadeau</label>
+              <input v-model="gift" type="text" id="gift" class="form-control" placeholder="Saisier un nom" />
+            </div>
+
+
+            <button type="submit" id="insertpeople" v-on:click="addagift">
+              Ajouter
+            </button>
+            <span class="closetxt" v-on:click="showaddformgift = !showaddformgift">Fermer</span>
+          </form>
+        </div>
+
+
+      </div>
+
+      <div id="addpe" v-on:click="showaddform = !showaddform">
+        Ajouter une personne
+      </div>
     </div>
-  </div>
   </div>
   <script>
     const content = new Vue({
@@ -186,7 +187,7 @@
         whosearch: '',
         birthdaygift: [],
         birthdaylist: [],
-
+        daysleft:'',
 
         showaddform: false,
         showdetails: false,
@@ -194,6 +195,34 @@
       },
 
       methods: {
+        countdown: function (day) {
+          const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+          ];
+
+          const thedate = day.split('-');
+
+
+          
+
+         
+          var actu = new Date();
+          var annee = actu.getFullYear();
+          var mois = thedate[1];
+          var anni = new Date(thedate[2]+"," + monthNames[mois-1] + annee);
+          var intervalle = anni.getTime() - actu.getTime();
+          intervalle = Math.floor(intervalle / (1000 * 60 * 60 * 24));
+           if(intervalle<0){
+             numberleft = intervalle+365;
+           }else{
+            numberleft = intervalle;
+           }
+           console.log(intervalle)
+          console.log(numberleft)
+
+          return numberleft;
+
+        },
         onFileSelected(event) {
           let reader = new FileReader();
           reader.onload = function () {
@@ -240,13 +269,14 @@
             firstname: this.firstname,
             lastname: this.lastname,
             date: this.date,
+            dateleft: this.countdown(this.date),
             picture: JSON.parse(localStorage.getItem("images")),
             cadeau: []
           })
 
           this.birthdaylist.sort(function (x, y) {
-            let a = new Date(x.date),
-              b = new Date(y.date);
+            let a = new Date(x.dateleft),
+              b = new Date(y.dateleft);
             return a - b;
           });
 
@@ -257,10 +287,12 @@
             }
           }
 
+         
+
           localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
           this.showaddform = false,
-          this.reset(),
-          localStorage.removeItem("images");
+            this.reset(),
+            localStorage.removeItem("images");
         },
         deleteMember() {
           who = this.choice
@@ -275,7 +307,7 @@
               this.birthdaylist[i].id = i;
             }
           }
-        localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
+          localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
 
         },
 
@@ -304,7 +336,7 @@
       mounted() {
         if (localStorage.getItem('birthdaylist'))
           this.birthdaylist = JSON.parse(localStorage.getItem('birthdaylist'));
-        this.dategenerator()
+        this.dategenerator()  
 
       },
       watch: {
@@ -343,7 +375,8 @@
         }
       },
       create() {
-        this.dategenerator()
+        this.dategenerator(),
+        this.countdown()
       },
     });
   </script>

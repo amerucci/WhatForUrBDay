@@ -7,8 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>What for Ur B-Day</title>
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
   <link rel="stylesheet" href="./css/style.css" />
@@ -17,9 +16,9 @@
 <body>
   <div id="app" v-bind:class="{moveleft : showdetails}">
     <h1>{{ title }}</h1>
-    <input type="text" id="search" class="form-control my-4" v-bind:placeholder="searchplaceholder" />
+    <input  v-model="whosearch" type="text" id="search" class="form-control my-4" v-bind:placeholder="searchplaceholder" />
     <ul class="list-group">
-      <li v-for="(birthday , index) in birthdaylist" @click="getinformations(index),showdetails = !showdetails"
+      <li v-for="(birthday , index) in filteredListPeople" @click="getinformations(index),showdetails = !showdetails"
         class="listp" :key="index">
         <div class="listimg">
           <img :src="birthday.picture" />
@@ -29,12 +28,12 @@
           <span>{{ birthday.date }}</span>
         </div>
         <div class="dayleft">
-2
+          2
         </div>
-         
-     
-       
-       
+
+
+
+
       </li>
     </ul>
 
@@ -61,16 +60,8 @@
         </div>
         <div class="form-group">
           <label for="picture">Photo</label>
-          <input
-          type="file"
-          style="display: none"
-          @change="onFileSelected"
-          ref="fileInput"
-          id="toto"
-        />
-        <button @click="$refs.fileInput.click()" expand="full"
-          >Choisir une image</button
-        >
+          <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" id="toto" />
+          <button @click="$refs.fileInput.click()" expand="full">Choisir une image</button>
         </div>
 
         <button type="submit" id="insertpeople" v-on:click="addamemember">
@@ -87,18 +78,18 @@
         <div class="headerdetail">
           <div class="headerdetailinfos">
             <span class="back" @click="showdetails = !showdetails, reset()"><span class="material-icons">
-              arrow_back_ios_new
+                arrow_back_ios_new
               </span>Retour</span>
-           
-            <span style="float:right; margin-right:20px"> 
-              
-              <span class="material-icons"v-on:click="deleteMember(), showdetails = !showdetails, reset()">
-                delete_outline
-                </span>
 
-            
-              
+            <span style="float:right; margin-right:20px">
+
+              <span class="material-icons" v-on:click="deleteMember(), showdetails = !showdetails, reset()">
+                delete_outline
               </span>
+
+
+
+            </span>
           </div>
 
         </div>
@@ -109,15 +100,17 @@
 
 
         <div class="detailbody">
-          
+
           <h2>{{ firstname }} {{ lastname }}</h2>
           <span>{{ date }} </span>
-  
-          <input v-model="whatsearch" type="text" id="search" class="form-control searchgift" placeholder="Rechercher un cadeau" />
+
+          <input v-model="whatsearch" type="text" id="search" class="form-control searchgift"
+            placeholder="Rechercher un cadeau" />
 
           <ul class="list-group">
             <li v-for="gift in filteredList" class="giftli">
-              <span class="dot"></span><span class="giftname">{{ gift.cadeau }} </span><span class="giftdate">{{ gift.date }}</span>
+              <span class="dot"></span><span class="giftname">{{ gift.gift }} </span><span
+                class="giftdate">{{ gift.date }}</span>
             </li>
           </ul>
 
@@ -139,12 +132,15 @@
         v-on:click="showaddformgift = !showaddformgift"></div>
 
 
-     <div class="addp" v-bind:class="{ showaddform : showaddformgift } ">
+      <div class="addp" v-bind:class="{ showaddform : showaddformgift } ">
         <h2>Ajouter un cadeau</h2>
         <form v-on:submit.prevent>
           <div class="form-group">
             <label for="year">Année</label>
-            <input v-model="year" type="date" id="year" class="form-control" placeholder="Choisissez une date" />
+            <select v-model="year" class="form-control" id="year">
+
+              <option v-for="year in years">{{ year.date}}</option>
+            </select>
           </div>
 
           <div class="form-group">
@@ -153,12 +149,12 @@
           </div>
 
 
-          <button type="submit" id="insertpeople" v-on:click="addamemember">
+          <button type="submit" id="insertpeople" v-on:click="addagift">
             Ajouter
           </button>
           <span class="closetxt" v-on:click="showaddformgift = !showaddformgift">Fermer</span>
         </form>
-      </div> 
+      </div>
 
 
     </div>
@@ -179,119 +175,65 @@
         date: '',
         picture: '',
         choice: '',
-        whatsearch:'',
-        birthdaygift:[],
-        birthdaylist: [{
-            firstname: "Alain",
-            lastname: "Merucci",
-            date: "07/03/1985",
-            picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.18169-9/c0.23.206.206a/p206x206/11407045_10153460687414382_4950241106672486360_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=da31f3&_nc_ohc=7wWSljZKjU4AX_dQM_b&_nc_ht=scontent-cdt1-1.xx&oh=00_AT-nX0CqpiA2gH4c1wysO-OBWLKIBDJqhYbNrc_kbahlJw&oe=61DD932C",
-            cadeau : [
-              {
-                date : "2022",
-                cadeau : "Voiture"
-              },
-              {
-                date : "2022",
-                cadeau : "PS5"
-              },
-              {
-                date : "2022",
-                cadeau : "PS5"
-              },
-              {
-                date : "2022",
-                cadeau : "PS5"
-              },
-              {
-                date : "2022",
-                cadeau : "PS5"
-              }
-            ]
-          },
-          {
-            firstname: "Anais",
-            lastname: "Bonin",
-            date: "25/11/1990",
-            picture: "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.6435-9/c0.34.206.206a/p206x206/83073868_10157986467204382_4176350572846252032_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=da31f3&_nc_ohc=GpoisrtHcEEAX9Ox2nc&_nc_ht=scontent-cdg2-1.xx&oh=00_AT9ESaudgVNqY_f7nCzDRR4473SvsYbppLW_CWYeeHGIQg&oe=61DD15FC"
-          },
-          {
-            firstname: "Valentina",
-            lastname: "Merucci",
-            date: "01/10/2013",
-            picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-9/p206x206/116551888_10158633824234382_7068094440975290584_n.jpg?_nc_cat=109&ccb=1-5&_nc_sid=da31f3&_nc_ohc=UOKikPJORU4AX98QB4f&tn=pCqHVaF89K2bhwYg&_nc_ht=scontent-cdt1-1.xx&oh=00_AT_0TeVHR6IYfyMm_0LP2Pcl4YUtFqEpXSxDRJXHt4lTIA&oe=61DF20E9"
-          },
-          {
-            firstname: "Paolo",
-            lastname: "Merucci",
-            date: "30/12/2019",
-            picture: "https://scontent-cdt1-1.xx.fbcdn.net/v/t1.6435-9/170408186_10223759590391271_1331194073963531623_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=730e14&_nc_ohc=NoM6kNIZ8ZMAX8yfn3S&_nc_ht=scontent-cdt1-1.xx&oh=00_AT-KrlYO8QcwFzlsS2fy93m1roKDpIjcB-ZcyxuGc18Syg&oe=61DE2B94"
-          },
-          {
-            firstname: "Bianca",
-            lastname: "Merucci",
-            date: "01/10/2013",
-            cadeau : [
-              {
-                date : "2022",
-                cadeau : "doudou"
-              }
-            ]
-          },
-          {
-            firstname: "Alessando",
-            lastname: "Merucci",
-            date: "30/12/2019"
-          },
-          {
-            firstname: "Laurent",
-            lastname: "Bonin",
-            date: "25/11/1990"
-          },
-          {
-            firstname: "Véronique",
-            lastname: "Lamblin",
-            date: "25/11/1990"
-          },
-          {
-            firstname: "Chloé",
-            lastname: "Bonin",
-            date: "25/11/1990"
-          },
-          {
-            firstname: "Rose",
-            lastname: "Bonin",
-            date: "25/11/1990"
-          },
-        ],
-        
+        years: [],
+        gift:'',
+        year: '',
+        update:false,
+        whatsearch: '',
+        whosearch: '',
+        birthdaygift: [],
+        birthdaylist: [],
+         
+
         showaddform: false,
         showdetails: false,
         showaddformgift: false
       },
-      
+
       methods: {
         onFileSelected(event) {
-	
-      
-		
-  let reader = new FileReader();
-  reader.onload = function () {
-    localStorage.setItem("images", JSON.stringify(reader.result));
-  };
-  if (event.target.files[0]) {
-    reader.readAsDataURL(event.target.files[0]);
-    localStorage.removeItem("images");
-  }
-},
+          let reader = new FileReader();
+          reader.onload = function () {
+            localStorage.setItem("images", JSON.stringify(reader.result));
+          };
+          if (event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+            localStorage.removeItem("images");
+          }
+        },
+        dategenerator: function () {
+          for (let index = 2021; index <= 2040; index++) {
+            this.years.push({
+              date: index,
+
+            })
+            console.log(index)
+          }
+        },
+
+        addagift: function () { this.showaddformgift = false,
+          this.update=true;
+         this.birthdaygift.push({
+           date: this.year,
+           gift: this.gift
+         }),
+         this.year = '',
+this.gift = ''
+         this.birthdaylist[this.choice].push(this.birthdaygift)
+        
 
 
+        
+        },
+
+       
         addamemember: function () {
           this.birthdaylist.push({
             firstname: this.firstname,
             lastname: this.lastname,
             date: this.date,
             picture: JSON.parse(localStorage.getItem("images")),
+            cadeau:[]
           })
           console.log("un membre a été ajouté");
           localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
@@ -301,7 +243,7 @@
             this.lastname = '',
             this.date = '',
             this.picture = ''
-            localStorage.removeItem("images");
+          localStorage.removeItem("images");
         },
         //On supprime l'élement sur lequel on a cliqué grâce à la récupération de l'index
         deleteMember() {
@@ -314,13 +256,13 @@
         },
 
         getinformations: function (who) {
-            this.firstname = this.birthdaylist[who].firstname,
+          this.firstname = this.birthdaylist[who].firstname,
             this.lastname = this.birthdaylist[who].lastname,
             this.date = this.birthdaylist[who].date,
             this.picture = this.birthdaylist[who].picture
-            this.birthdaygift = this.birthdaylist[who].cadeau
-            this.choice = who
-            
+          this.birthdaygift = this.birthdaylist[who].cadeau
+          this.choice = who
+
 
         },
         emptyArray: function () {
@@ -337,20 +279,44 @@
       mounted() {
         if (localStorage.getItem('birthdaylist'))
           this.birthdaylist = JSON.parse(localStorage.getItem('birthdaylist'));
+        this.dategenerator()
+        
       },
-      computed:{
+      watch: {
+        update: function()  {
+          
+          this.update=false
+          localStorage.removeItem('birthdaylist');
+          localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
+        }
+    },
+      computed: {
         filteredList() {
           if (this.whatsearch != "") {
-        return this.birthdaygift.filter((gifts) => {
-          return gifts.cadeau 
-            .toLowerCase()
-            .includes(this.whatsearch.toLowerCase());
-        });
-      }else{
-        return this.birthdaygift
-      }
+            return this.birthdaygift.filter((gifts) => {
+              return gifts.gift
+                .toLowerCase()
+                .includes(this.whatsearch.toLowerCase());
+            });
+          } else {
+            return this.birthdaygift
+          }
+        },
+        filteredListPeople() {
+          if (this.whosearch != "") {
+            return this.birthdaylist.filter((people) => {
+              return people.firstname
+                .toLowerCase()
+                .includes(this.whosearch.toLowerCase());
+            });
+          } else {
+            return this.birthdaylist
+          }
         }
-      }
+      },
+      create() {
+        this.dategenerator()
+      },
     });
   </script>
 </body>

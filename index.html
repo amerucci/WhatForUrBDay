@@ -14,12 +14,15 @@
 </head>
 
 <body>
+  <div id="appcontent">
   <div id="app" v-bind:class="{moveleft : showdetails}">
     <h1>{{ title }}</h1>
-    <input  v-model="whosearch" type="text" id="search" class="form-control my-4" v-bind:placeholder="searchplaceholder" />
-    <ul class="list-group">
-      <li v-for="(birthday , index) in filteredListPeople" @click="getinformations(index),showdetails = !showdetails"
-        class="listp" :key="index">
+    <input v-model="whosearch" type="text" id="search" class="form-control my-4"
+      v-bind:placeholder="searchplaceholder" />
+    <ul class="list-group-home">
+
+      <li v-for="(birthday , index) in filteredListPeople"
+        @click="getinformations(birthday.id),showdetails = !showdetails" class="listp" :key="birthday.id">
         <div class="listimg">
           <img :src="birthday.picture" />
         </div>
@@ -61,7 +64,7 @@
         <div class="form-group">
           <label for="picture">Photo</label>
           <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" id="toto" />
-          <button @click="$refs.fileInput.click()" expand="full">Choisir une image</button>
+          <button @click="$refs.fileInput.click()" expand="full" id="picture">Choisir une image</button>
         </div>
 
         <button type="submit" id="insertpeople" v-on:click="addamemember">
@@ -163,7 +166,7 @@
       Ajouter une personne
     </div>
   </div>
-
+  </div>
   <script>
     const content = new Vue({
       el: "#app",
@@ -176,14 +179,14 @@
         picture: '',
         choice: '',
         years: [],
-        gift:'',
+        gift: '',
         year: '',
-        update:false,
+        update: false,
         whatsearch: '',
         whosearch: '',
         birthdaygift: [],
         birthdaylist: [],
-         
+
 
         showaddform: false,
         showdetails: false,
@@ -207,51 +210,72 @@
               date: index,
 
             })
-            console.log(index)
+
           }
         },
 
-        addagift: function () { this.showaddformgift = false,
-          this.update=true;
-         this.birthdaygift.push({
-           date: this.year,
-           gift: this.gift
-         }),
-         this.year = '',
-this.gift = ''
-         this.birthdaylist[this.choice].push(this.birthdaygift)
-        
+        addagift: function () {
+          this.showaddformgift = false,
+            this.update = true;
+          this.birthdaygift.push({
+              date: this.year,
+              gift: this.gift
+            }),
+            this.year = '',
+            this.gift = ''
+          this.birthdaylist[this.choice].push(this.birthdaygift)
 
 
-        
+
+
+        },
+        generateid: function () {
+          length = this.birthdaylist.length
+          return length
         },
 
-       
         addamemember: function () {
           this.birthdaylist.push({
+            id: this.generateid(),
             firstname: this.firstname,
             lastname: this.lastname,
             date: this.date,
             picture: JSON.parse(localStorage.getItem("images")),
-            cadeau:[]
+            cadeau: []
           })
-          console.log("un membre a été ajouté");
+
+          this.birthdaylist.sort(function (x, y) {
+            let a = new Date(x.date),
+              b = new Date(y.date);
+            return a - b;
+          });
+
+
+          for (var i = 0; i < this.birthdaylist.length; i++) {
+            if (this.birthdaylist[i].id != i) {
+              this.birthdaylist[i].id = i;
+            }
+          }
+
           localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
           this.showaddform = false,
-
-            this.firstname = '',
-            this.lastname = '',
-            this.date = '',
-            this.picture = ''
+          this.reset(),
           localStorage.removeItem("images");
         },
-        //On supprime l'élement sur lequel on a cliqué grâce à la récupération de l'index
         deleteMember() {
           who = this.choice
-          //alert (who)
           this.birthdaylist.splice(who, 1)
-          // On met à jour le localStorage
-          localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
+          this.birthdaylist.sort(function (x, y) {
+            let a = new Date(x.date),
+              b = new Date(y.date);
+            return a - b;
+          });
+          for (var i = 0; i < this.birthdaylist.length; i++) {
+            if (this.birthdaylist[i].id != i) {
+              this.birthdaylist[i].id = i;
+            }
+          }
+        localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
 
         },
 
@@ -274,22 +298,26 @@ this.gift = ''
             this.lastname = '',
             this.date = '',
             this.picture = ''
-        }
+        },
+
       },
       mounted() {
         if (localStorage.getItem('birthdaylist'))
           this.birthdaylist = JSON.parse(localStorage.getItem('birthdaylist'));
         this.dategenerator()
-        
+
       },
       watch: {
-        update: function()  {
-          
-          this.update=false
+        update: function () {
+
+          this.update = false
+
+
+
           localStorage.removeItem('birthdaylist');
           localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
         }
-    },
+      },
       computed: {
         filteredList() {
           if (this.whatsearch != "") {

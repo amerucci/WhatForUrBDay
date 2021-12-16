@@ -6,7 +6,15 @@ body {
     position: relative;
 }
 
-
+div#appcontent {
+    max-width: 375px;
+    width: 100vw;
+    height: 100vh;
+    max-height: 812px;
+    margin: auto;
+    overflow: hidden;
+    box-shadow: 0px 2px 20px rgb(0 0 0 / 25%);
+}
 #addpe, #addgift  {background: #42BDE3;border: none;border-radius: 25px;padding: 10px;width: calc(100% - 80px);color: #fff;bottom:20px;position:absolute;left: 40px;text-align:center;}
 
 #app{
@@ -112,6 +120,13 @@ label {
 
 ul.list-group {
     height: 50%;
+    overflow-y: auto;
+    /* background: #FF9900; */
+}
+
+ul.list-group-home {
+    padding:0;
+    height: 65%;
     overflow-y: auto;
     /* background: #FF9900; */
 }
@@ -224,4 +239,19 @@ span.giftname {
     width: 86%;
     float: left;
     padding-left: 25px;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+  }
+
+  button#picture {
+    background: #F6F6F6;
+    border: 1px solid grey;
+    border-radius: 25px;
+    padding: 10px;
+    width: 100%;
 }

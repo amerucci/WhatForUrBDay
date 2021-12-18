@@ -20,7 +20,6 @@
       <input v-model="whosearch" type="text" id="search" class="form-control my-4"
         v-bind:placeholder="searchplaceholder" />
       <ul class="list-group-home">
-
         <li v-for="(birthday , index) in filteredListPeople"
           @click="getinformations(birthday.id),showdetails = !showdetails" class="listp" :key="birthday.id">
           <div class="listimg">
@@ -29,15 +28,10 @@
           <div class="userinfo">
             <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
             <span>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
-
           </div>
           <div class="dayleft">
             {{ birthday.yourage}} ans
           </div>
-
-
-
-
         </li>
       </ul>
 
@@ -93,42 +87,29 @@
             </div>
             <div class="userinfos">
               <h2>{{ firstname }} {{ lastname }}</h2>
-            <span>{{ date }} </span>
+              <span>{{ date }} </span><br />
+              <span>{{ aged+1 }} ans dans </span>
             </div>
-            
+
           </div>
           <div class="dayleft_detail">
-            100 jours
+            {{ daysleft }} jours
           </div>
-
-
           <div class="detailpicture">
-
             <img :src="picture" />
           </div>
-
-
           <div class="detailbody">
-
-            <h2>{{ firstname }} {{ lastname }}</h2>
-            <span>{{ date }} </span>
-
             <input v-model="whatsearch" type="text" id="search" class="form-control searchgift"
               placeholder="Rechercher un cadeau" />
-
             <ul class="list-group">
               <li v-for="gift in filteredList" class="giftli">
                 <span class="dot"></span><span class="giftname">{{ gift.gift }} </span><span
                   class="giftdate">{{ gift.date }}</span>
               </li>
             </ul>
-
           </div>
 
-
-
           <div class="overlay"></div>
-
 
           <div id="addgift" v-on:click="showaddformgift = !showaddformgift">
             Ajouter un cadeau
@@ -173,245 +154,9 @@
       </div>
     </div>
   </div>
-  <script>
-    const content = new Vue({
-      el: "#app",
-      data: {
-        title: "Mes anniversaires",
-        searchplaceholder: "Rechercher une personne",
-        firstname: '',
-        lastname: '',
-        date: '',
-        picture: '',
-        choice: '',
-        years: [],
-        gift: '',
-        year: '',
-        update: false,
-        whatsearch: '',
-        whosearch: '',
-        birthdaygift: [],
-        birthdaylist: [],
-        daysleft: '',
-        yourage: '',
-        showaddform: false,
-        showdetails: false,
-        showaddformgift: false
-      },
 
-      methods: {
+  <script src="./script/vue.js"></script>
 
-        next: function (base) {
-          return base + 1
-        },
-
-        countdown: function (day) {
-          const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-          ];
-
-          const thedate = day.split('-');
-
-
-
-
-
-          var actu = new Date();
-          var annee = actu.getFullYear();
-          var mois = thedate[1];
-          var anni = new Date(thedate[2] + "," + monthNames[mois - 1] + annee);
-          var intervalle = anni.getTime() - actu.getTime();
-          intervalle = Math.floor(intervalle / (1000 * 60 * 60 * 24));
-          if (intervalle < 0) {
-            numberleft = intervalle + 366;
-          } else {
-            numberleft = intervalle + 1;
-          }
-          console.log(intervalle)
-          console.log(numberleft)
-
-          return numberleft;
-
-        },
-        age: function (day) {
-          const thedate = day.split('-');
-          var today = new Date();
-
-          var an = thedate[0];
-          var mois = thedate[1]
-          var day = thedate[2]
-
-          var dateNaissance = new Date(an + "-" + mois + "-" + day);
-
-
-          var age = today.getFullYear() - dateNaissance.getFullYear();
-          var m = today.getMonth() - dateNaissance.getMonth();
-          if (m < 0 || (m === 0 && today.getDate() < dateNaissance.getDate())) {
-            age = age - 1;
-          }
-
-
-          return age
-
-        },
-        onFileSelected(event) {
-          let reader = new FileReader();
-          reader.onload = function () {
-            localStorage.setItem("images", JSON.stringify(reader.result));
-          };
-          if (event.target.files[0]) {
-            reader.readAsDataURL(event.target.files[0]);
-            localStorage.removeItem("images");
-          }
-        },
-        dategenerator: function () {
-          for (let index = 2021; index <= 2040; index++) {
-            this.years.push({
-              date: index,
-
-            })
-
-          }
-        },
-
-        addagift: function () {
-          this.showaddformgift = false,
-            this.update = true;
-          this.birthdaygift.push({
-              date: this.year,
-              gift: this.gift
-            }),
-            this.year = '',
-            this.gift = ''
-          this.birthdaylist[this.choice].push(this.birthdaygift)
-
-
-
-
-        },
-        generateid: function () {
-          length = this.birthdaylist.length
-          return length
-        },
-
-        addamemember: function () {
-          this.birthdaylist.push({
-            id: this.generateid(),
-            firstname: this.firstname,
-            lastname: this.lastname,
-            date: this.date,
-            dateleft: this.countdown(this.date),
-            yourage: this.age(this.date),
-            picture: JSON.parse(localStorage.getItem("images")),
-            cadeau: []
-          })
-
-          this.birthdaylist.sort(function (x, y) {
-            let a = new Date(x.dateleft),
-              b = new Date(y.dateleft);
-            return a - b;
-          });
-
-
-          for (var i = 0; i < this.birthdaylist.length; i++) {
-            if (this.birthdaylist[i].id != i) {
-              this.birthdaylist[i].id = i;
-            }
-          }
-
-
-
-          localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
-          this.showaddform = false,
-            this.reset(),
-            localStorage.removeItem("images");
-        },
-        deleteMember() {
-          who = this.choice
-          this.birthdaylist.splice(who, 1)
-          this.birthdaylist.sort(function (x, y) {
-            let a = new Date(x.date),
-              b = new Date(y.date);
-            return a - b;
-          });
-          for (var i = 0; i < this.birthdaylist.length; i++) {
-            if (this.birthdaylist[i].id != i) {
-              this.birthdaylist[i].id = i;
-            }
-          }
-          localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
-
-        },
-
-        getinformations: function (who) {
-          this.firstname = this.birthdaylist[who].firstname,
-            this.lastname = this.birthdaylist[who].lastname,
-            this.date = this.birthdaylist[who].date,
-            this.picture = this.birthdaylist[who].picture
-          this.birthdaygift = this.birthdaylist[who].cadeau
-          this.choice = who
-
-
-        },
-        emptyArray: function () {
-          this.birthdaydetails.pop()
-        },
-
-        reset: function () {
-          this.firstname = '',
-            this.lastname = '',
-            this.date = '',
-            this.picture = ''
-        },
-
-      },
-      mounted() {
-        if (localStorage.getItem('birthdaylist'))
-          this.birthdaylist = JSON.parse(localStorage.getItem('birthdaylist'));
-        this.dategenerator()
-
-      },
-      watch: {
-        update: function () {
-
-          this.update = false
-
-
-
-          localStorage.removeItem('birthdaylist');
-          localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
-        }
-      },
-      computed: {
-        filteredList() {
-          if (this.whatsearch != "") {
-            return this.birthdaygift.filter((gifts) => {
-              return gifts.gift
-                .toLowerCase()
-                .includes(this.whatsearch.toLowerCase());
-            });
-          } else {
-            return this.birthdaygift
-          }
-        },
-        filteredListPeople() {
-          if (this.whosearch != "") {
-            return this.birthdaylist.filter((people) => {
-              return people.firstname
-                .toLowerCase()
-                .includes(this.whosearch.toLowerCase());
-            });
-          } else {
-            return this.birthdaylist
-          }
-        }
-      },
-      create() {
-        this.dategenerator(),
-          this.countdown()
-      },
-    });
-  </script>
 </body>
 
 </html>

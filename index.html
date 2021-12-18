@@ -28,10 +28,11 @@
           </div>
           <div class="userinfo">
             <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
-            <span>{{ birthday.date }}</span>
+            <span>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
+
           </div>
           <div class="dayleft">
-            {{ birthday.dateleft}}
+            {{ birthday.yourage}} ans
           </div>
 
 
@@ -83,20 +84,24 @@
             <div class="headerdetailinfos">
               <span class="back" @click="showdetails = !showdetails, reset()"><span class="material-icons">
                   arrow_back_ios_new
-                </span>Retour</span>
-
+                </span>Anniversaires</span>
               <span style="float:right; margin-right:20px">
-
                 <span class="material-icons" v-on:click="deleteMember(), showdetails = !showdetails, reset()">
                   delete_outline
                 </span>
-
-
-
               </span>
             </div>
-
+            <div class="userinfos">
+              <h2>{{ firstname }} {{ lastname }}</h2>
+            <span>{{ date }} </span>
+            </div>
+            
           </div>
+          <div class="dayleft_detail">
+            100 jours
+          </div>
+
+
           <div class="detailpicture">
 
             <img :src="picture" />
@@ -187,14 +192,19 @@
         whosearch: '',
         birthdaygift: [],
         birthdaylist: [],
-        daysleft:'',
-
+        daysleft: '',
+        yourage: '',
         showaddform: false,
         showdetails: false,
         showaddformgift: false
       },
 
       methods: {
+
+        next: function (base) {
+          return base + 1
+        },
+
         countdown: function (day) {
           const monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
@@ -203,24 +213,45 @@
           const thedate = day.split('-');
 
 
-          
 
-         
+
+
           var actu = new Date();
           var annee = actu.getFullYear();
           var mois = thedate[1];
-          var anni = new Date(thedate[2]+"," + monthNames[mois-1] + annee);
+          var anni = new Date(thedate[2] + "," + monthNames[mois - 1] + annee);
           var intervalle = anni.getTime() - actu.getTime();
           intervalle = Math.floor(intervalle / (1000 * 60 * 60 * 24));
-           if(intervalle<0){
-             numberleft = intervalle+365;
-           }else{
-            numberleft = intervalle;
-           }
-           console.log(intervalle)
+          if (intervalle < 0) {
+            numberleft = intervalle + 366;
+          } else {
+            numberleft = intervalle + 1;
+          }
+          console.log(intervalle)
           console.log(numberleft)
 
           return numberleft;
+
+        },
+        age: function (day) {
+          const thedate = day.split('-');
+          var today = new Date();
+
+          var an = thedate[0];
+          var mois = thedate[1]
+          var day = thedate[2]
+
+          var dateNaissance = new Date(an + "-" + mois + "-" + day);
+
+
+          var age = today.getFullYear() - dateNaissance.getFullYear();
+          var m = today.getMonth() - dateNaissance.getMonth();
+          if (m < 0 || (m === 0 && today.getDate() < dateNaissance.getDate())) {
+            age = age - 1;
+          }
+
+
+          return age
 
         },
         onFileSelected(event) {
@@ -270,6 +301,7 @@
             lastname: this.lastname,
             date: this.date,
             dateleft: this.countdown(this.date),
+            yourage: this.age(this.date),
             picture: JSON.parse(localStorage.getItem("images")),
             cadeau: []
           })
@@ -287,7 +319,7 @@
             }
           }
 
-         
+
 
           localStorage.setItem("birthdaylist", JSON.stringify(this.birthdaylist));
           this.showaddform = false,
@@ -336,7 +368,7 @@
       mounted() {
         if (localStorage.getItem('birthdaylist'))
           this.birthdaylist = JSON.parse(localStorage.getItem('birthdaylist'));
-        this.dategenerator()  
+        this.dategenerator()
 
       },
       watch: {
@@ -376,7 +408,7 @@
       },
       create() {
         this.dategenerator(),
-        this.countdown()
+          this.countdown()
       },
     });
   </script>

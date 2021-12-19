@@ -30,7 +30,7 @@
             <span>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
           </div>
           <div class="dayleft">
-            {{ birthday.yourage}} ans
+            {{ birthday.yourage}} <span v-if="birthday.yourage == 1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span>
           </div>
         </li>
       </ul>
@@ -87,10 +87,9 @@
             </div>
             <div class="userinfos">
               <h2>{{ firstname }} {{ lastname }}</h2>
-              <span>{{ date }} </span><br />
+              <span>{{ dateformated }} </span><br />
               <span>{{ aged+1 }} ans dans </span>
             </div>
-
           </div>
           <div class="dayleft_detail">
             {{ daysleft }} jours

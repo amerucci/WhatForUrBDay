@@ -6,6 +6,7 @@ const content = new Vue({
       firstname: '',
       lastname: '',
       date: '',
+      dateformated:'',
       picture: '',
       choice: '',
       years: [],
@@ -63,6 +64,16 @@ const content = new Vue({
           age = age - 1;
         }
         return age
+      },
+      formatdate: function(){
+        const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+        "Juillet", "Août", "Spetembre", "Octobre", "Novembre", "Décembre"
+      ];
+        const thedate = this.date.split('-');
+        var an = thedate[0];
+        var mois = thedate[1]
+        var day = thedate[2]
+        return day+" "+ monthNames[mois - 1]+" "+an
       },
       onFileSelected(event) {
         let reader = new FileReader();
@@ -146,7 +157,8 @@ const content = new Vue({
         this.birthdaygift = this.birthdaylist[who].cadeau
         this.aged = this.birthdaylist[who].yourage
         this.daysleft = this.birthdaylist[who].dateleft
-        this.choice = who
+        this.choice = who,
+        this.dateformated = this.formatdate()
       },
       emptyArray: function () {
         this.birthdaydetails.pop()

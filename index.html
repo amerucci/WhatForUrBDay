@@ -30,7 +30,12 @@
             <span v-if="birthday.dateleft == '0'   ">{{next(birthday.yourage)}} <span v-if="birthday.yourage <=1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span> aujourd'hui</span>
             <span v-else>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
           </div>
-          <div class="dayleft">
+          <div class="dayleft"  v-if="birthday.dateleft == '0'   " style="display:flex; align-items:center;">
+            <span class="material-icons">
+              celebration
+              </span>
+          </div>
+          <div class="dayleft" v-else>
             {{ birthday.yourage}} <span v-if="birthday.yourage == 1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span>
           </div>
         </li>

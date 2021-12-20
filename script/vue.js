@@ -119,7 +119,7 @@ const content = new Vue({
           date: this.date,
           dateleft: this.countdown(this.date),
           yourage: this.age(this.date),
-          picture: JSON.parse(localStorage.getItem("images")),
+          picture: JSON.parse(localStorage.getItem("images")) != null ? JSON.parse(localStorage.getItem("images")) : "../images/avatar.png",
           cadeau: []
         })
         this.birthdaylist.sort(function (x, y) {

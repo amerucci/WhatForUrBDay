@@ -27,7 +27,8 @@
           </div>
           <div class="userinfo">
             <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
-            <span>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
+            <span v-if="birthday.dateleft == '0'   ">{{next(birthday.yourage)}} <span v-if="birthday.yourage <=1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span> aujourd'hui</span>
+            <span v-else>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
           </div>
           <div class="dayleft">
             {{ birthday.yourage}} <span v-if="birthday.yourage == 1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span>
@@ -87,7 +88,9 @@
             </div>
             <div class="userinfos">
               <h2>{{ firstname }} {{ lastname }}</h2>
-              <span>{{ dateformated }} </span><br />
+              <span><span class="material-icons">
+                cake
+                </span>{{ dateformated }} </span><br />
               <span>{{ aged+1 }} ans dans </span>
             </div>
           </div>

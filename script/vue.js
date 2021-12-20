@@ -42,9 +42,13 @@ const content = new Vue({
         var anni = new Date(thedate[2] + "," + monthNames[mois - 1] + annee);
         var intervalle = anni.getTime() - actu.getTime();
         intervalle = Math.floor(intervalle / (1000 * 60 * 60 * 24));
-        if (intervalle < 0) {
-          numberleft = intervalle + 366;
+        console.log(intervalle)
+        if((intervalle) == -1){
+            numberleft = 0
         } else {
+        if (intervalle < -1) {
+          numberleft = intervalle + 366;
+        }else 
           numberleft = intervalle + 1;
         }
         console.log(intervalle)

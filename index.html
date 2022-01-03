@@ -42,12 +42,12 @@
           </div>
           <div class="userinfo">
             <span class="peoplename">{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
-            <span v-if="birthday.dateleft == '0'   ">{{next(birthday.yourage)}} <span
+            <span v-if="birthday.dateleft == '0'   ">{{(birthday.yourage)}} <span
                 v-if="birthday.yourage <=1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span> aujourd'hui</span>
             <span v-else>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
           </div>
           <div class="dayleft" v-if="birthday.dateleft == '0'   " style="display:flex; align-items:center;">
-            <span class="material-icons">
+            <span class="material-icons ">
               celebration
             </span>
           </div>
@@ -121,7 +121,7 @@
             </div>
             <div class="userinfos">
               <h2>{{ firstname }} {{ lastname }}</h2>
-              <span><span class="material-icons">
+              <span><span class="material-icons cakeicon">
                   cake
                 </span>{{ dateformated }} </span><br />
               <span>{{ aged+1 }} ans dans </span>
@@ -133,10 +133,22 @@
           <div class="detailpicture">
             <img :src="picture" />
           </div>
-          <div class="contact">
-            <a href="sms:/* phone number here */&body=/* body text here */">Link</a>
+          <div v-if="phonenumber != ''" class="contact">
             <a
-              :href="`sms:${phonenumber}&body=Bonjour ${firstname} je te souhaite un joyeux anniversaire!!!`">{{phonenumber}}</a>
+              :href="`tel:${phonenumber}`"><span class="material-icons icon callicon">
+                call
+                </span>
+                Appeler {{ firstname }} 
+              </span>
+              </a>
+            <a
+              :href="`sms:${phonenumber}?&body=Coucou ${firstname} je te souhaite un joyeux anniversaire!!!`"><span class="material-icons icon smsicon">
+                sms
+                </span>
+              
+                Lui envoyer un SMS
+             
+              </a>
 
           </div>
           <div class="detailbody">
@@ -156,7 +168,9 @@
 
             <ul class="list-group">
               <li v-for="gift in filteredList" class="giftli">
-                <span class="dot"></span><span class="giftname">{{ gift.gift }} </span><span
+                <span class="material-icons dot">
+                  card_giftcard
+                  </span><span class="giftname">{{ gift.gift }} </span><span
                   class="giftdate">{{ gift.date }}</span>
               </li>
             </ul>

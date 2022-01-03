@@ -30,6 +30,8 @@ const content = new Vue({
 
     methods: {
 
+      
+
       next: function (base) {
         return base + 1
       },
@@ -44,11 +46,11 @@ const content = new Vue({
         const thedate = day.split('-');
        
         var actu = new Date();
-        console.log(actu)
+        //console.log(actu)
         var annee = actu.getFullYear();
-        console.log(annee)
+        //console.log(annee)
         var mois = thedate[1];
-        console.log(mois)
+        //console.log(mois)
         var anni = new Date(thedate[2] + "-" + monthNames[mois - 1] +"-"+ annee);
         var intervalle = anni.getTime() - actu.getTime();
         intervalle = Math.floor(intervalle / (1000 * 60 * 60 * 24));
@@ -189,8 +191,24 @@ const content = new Vue({
       },
     },
     mounted() {
-      if (localStorage.getItem('birthdaylist'))
+      if (localStorage.getItem('birthdaylist')){
         this.birthdaylist = JSON.parse(localStorage.getItem('birthdaylist'));
+        let listtoupdate = JSON.parse(localStorage.getItem('birthdaylist'));
+        for (var i = 0; i < listtoupdate.length; i++) {
+          this.birthdaylist[i].dateleft = this.countdown(this.birthdaylist[i].date); 
+        }
+        this.birthdaylist.sort(function (x, y) {
+          let a = new Date(x.dateleft),
+            b = new Date(y.dateleft);
+            //console.log(a)
+          return a - b;
+        });
+        
+   
+        //this.birthdaylist = listtoupdate
+       
+      }
+       
       this.dategenerator()
     },
     watch: {
@@ -224,6 +242,8 @@ const content = new Vue({
         }
       }
     },
+  
+
     create() {
       this.dategenerator(),
         this.countdown()

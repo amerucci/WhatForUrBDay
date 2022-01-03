@@ -16,9 +16,21 @@
 <body>
   <div id="appcontent">
     <div id="app" v-bind:class="{moveleft : showdetails}">
+      <span class="material-icons addbirthday" v-on:click="showaddform = !showaddform">
+        add
+        </span>
       <h1>{{ title }}</h1>
-      <input v-model="whosearch" type="text" id="search" class="form-control my-4"
+      <div id="searchbar" class="my-4">
+        <span class="d-flex align-items-center">
+          <span class="material-icons" style="color: #a3a3a3;">
+            search
+            </span>
+          <input v-model="whosearch" type="text" id="search" class="form-control"
         v-bind:placeholder="searchplaceholder" />
+        </span>
+        
+      </div>
+      
       <ul class="list-group-home">
         <li v-for="(birthday , index) in filteredListPeople"
           @click="getinformations(birthday.id),showdetails = !showdetails" class="listp" :key="birthday.id">
@@ -26,7 +38,7 @@
             <img :src="birthday.picture" />
           </div>
           <div class="userinfo">
-            <span>{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
+            <span class="peoplename">{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
             <span v-if="birthday.dateleft == '0'   ">{{next(birthday.yourage)}} <span v-if="birthday.yourage <=1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span> aujourd'hui</span>
             <span v-else>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
           </div>
@@ -106,8 +118,20 @@
             <img :src="picture" />
           </div>
           <div class="detailbody">
-            <input v-model="whatsearch" type="text" id="search" class="form-control searchgift"
+            <div id="searchbar">
+            <span class="d-flex align-items-center">
+              <span class="material-icons" style="color: #a3a3a3;">
+                search
+                </span>
+                <input v-model="whatsearch" type="text" id="search" class="form-control searchgift"
               placeholder="Rechercher un cadeau" />
+            </span>
+          </div>
+
+
+
+
+       
             <ul class="list-group">
               <li v-for="gift in filteredList" class="giftli">
                 <span class="dot"></span><span class="giftname">{{ gift.gift }} </span><span

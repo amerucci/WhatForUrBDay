@@ -1,7 +1,7 @@
 const content = new Vue({
     el: "#app",
     data: {
-      title: "Mes anniversaires",
+      title: "Anniversaires",
       searchplaceholder: "Rechercher une personne",
       firstname: '',
       lastname: '',
@@ -119,7 +119,7 @@ const content = new Vue({
           date: this.date,
           dateleft: this.countdown(this.date),
           yourage: this.age(this.date),
-          picture: JSON.parse(localStorage.getItem("images")) != null ? JSON.parse(localStorage.getItem("images")) : "../images/avatar.png",
+          picture: JSON.parse(localStorage.getItem("images")) != null ? JSON.parse(localStorage.getItem("images")) : "https://alainmerucci.fr/projets-acs/whatforurbday/images/avatar.png",
           cadeau: []
         })
         this.birthdaylist.sort(function (x, y) {

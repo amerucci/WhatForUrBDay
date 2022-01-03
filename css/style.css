@@ -3,6 +3,7 @@ body {
     margin: 0;
     /* height: calc(100vh - calc(100vh - 100%)); */
     position: relative;
+    color: #a3a3a3;
 }
 
 div#appcontent {
@@ -13,6 +14,12 @@ div#appcontent {
     margin: auto;
     overflow: hidden;
     box-shadow: 0px 2px 20px rgb(0 0 0 / 25%);
+}
+
+.addp h2{
+    font-size: 25px;
+    margin-bottom: 20px;
+    color: #245faf;
 }
 
 #addpe,
@@ -40,10 +47,20 @@ div#appcontent {
 }
 
 #app h1 {
-    width: 200px;
-    text-align: center;
-    margin: auto;
+    width: 100%;
+    text-align: left;
+    font-size: 32px;
+    color: #245faf;
+    font-weight: bold;
+}
+
+.addbirthday {
+    float: right;
     font-size: 30px;
+    color: #a3a3a3;
+    position: relative;
+    width: 100%;
+    text-align: right;
 }
 
 
@@ -52,6 +69,8 @@ div#appcontent {
     height: 50px;
     margin-right: 10px;
     /* margin-left: auto; */
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .listimg img {
@@ -86,12 +105,31 @@ div#appcontent {
     left: 0;
 }
 
-.form-control {
+div#searchbar {
     background: #F6F6F6;
     border: 1px solid grey;
     border-radius: 25px;
     padding: 10px;
 }
+
+
+.form-control {background:transparent;border: none;padding: 0;padding-left: 10px;}
+
+.addp form input {
+    background: #F6F6F6;
+    border: 1px solid grey;
+    border-radius: 25px;
+    padding: 10px;
+}
+
+.addp form select {
+    background: #F6F6F6;
+    border: 1px solid grey;
+    border-radius: 25px;
+    padding: 10px;
+    height: auto!important;
+}
+
 
 
 .overlay {
@@ -118,7 +156,7 @@ div#appcontent {
 .closetxt {
     width: 100%;
     text-align: center;
-    color: #42BDE3;
+    color: #245faf;
     text-align: center;
     display: block;
     margin-top: 15px;
@@ -131,7 +169,9 @@ div#appcontent {
     border-radius: 25px;
     padding: 10px;
     width: 100%;
-    color: #fff
+    color: #fff;
+    background: linear-gradient(
+90deg, rgba(36, 95, 175, 1) 0%, rgba(47, 135, 209, 1) 100%);
 }
 
 label {
@@ -154,6 +194,11 @@ ul.list-group-home {
     /* background: #FF9900; */
 }
 
+span.peoplename {
+    color: #245faf;
+    font-weight: bold;
+    font-size: 18px;
+}
 
 /* Details */
 .details {
@@ -240,7 +285,7 @@ ul.list-group-home {
 
 .searchgift {
     /* margin-top:32px; */
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
 }
 
 .giftli {

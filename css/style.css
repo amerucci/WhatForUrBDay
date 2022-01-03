@@ -22,6 +22,20 @@ div#appcontent {
     color: #245faf;
 }
 
+
+input[type="date"]
+{
+    display:block;
+  
+    /* Solution 1 */
+     -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    min-height: 1.2em; 
+  
+    /* Solution 2 */
+    /* min-width: 96%; */
+}
+
 #addpe,
 #addgift {
     background: #42BDE3;
@@ -120,6 +134,7 @@ div#searchbar {
     border: 1px solid grey;
     border-radius: 25px;
     padding: 10px;
+    -webkit-appearance: none;
 }
 
 .addp form select {

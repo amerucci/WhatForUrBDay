@@ -35,14 +35,23 @@ const content = new Vue({
         const monthNames = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"
         ];
+
+    
+       
+
         const thedate = day.split('-');
+       
         var actu = new Date();
+        console.log(actu)
         var annee = actu.getFullYear();
+        console.log(annee)
         var mois = thedate[1];
-        var anni = new Date(thedate[2] + "," + monthNames[mois - 1] + annee);
+        console.log(mois)
+        var anni = new Date(thedate[2] + "-" + monthNames[mois - 1] +"-"+ annee);
         var intervalle = anni.getTime() - actu.getTime();
         intervalle = Math.floor(intervalle / (1000 * 60 * 60 * 24));
-        console.log(intervalle)
+        //console.log(intervalle)
+        //alert(parseInt(intervalle))
         if((intervalle) == -1){
             numberleft = 0
         } else {
@@ -51,8 +60,7 @@ const content = new Vue({
         }else 
           numberleft = intervalle + 1;
         }
-        console.log(intervalle)
-        console.log(numberleft)
+        
         return numberleft;
       },
       age: function (day) {

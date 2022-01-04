@@ -24,6 +24,8 @@ const content = new Vue({
       showdetails: false,
       showaddformgift: false,
       daysleft: '',
+      phonenumber:'',
+      email:'',
     },
 
     methods: {
@@ -126,6 +128,8 @@ const content = new Vue({
           lastname: this.lastname,
           date: this.date,
           dateleft: this.countdown(this.date),
+          email: this.email,
+          phonenumber: this.phonenumber,
           yourage: this.age(this.date),
           picture: JSON.parse(localStorage.getItem("images")) != null ? JSON.parse(localStorage.getItem("images")) : "https://alainmerucci.fr/projets-acs/whatforurbday/images/avatar.png",
           cadeau: []
@@ -164,6 +168,8 @@ const content = new Vue({
       getinformations: function (who) {
         this.firstname = this.birthdaylist[who].firstname,
         this.lastname = this.birthdaylist[who].lastname,
+        this.phonenumber = this.birthdaylist[who].phonenumber,
+        this.email = this.birthdaylist[who].email,
         this.date = this.birthdaylist[who].date,
         this.picture = this.birthdaylist[who].picture
         this.birthdaygift = this.birthdaylist[who].cadeau

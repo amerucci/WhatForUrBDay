@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
   <link rel="stylesheet" href="./css/style.css" />
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192x192.png">
+  <meta name="theme-color" content="#ffffff">
 </head>
 
 <body>
@@ -18,19 +21,19 @@
     <div id="app" v-bind:class="{moveleft : showdetails}">
       <span class="material-icons addbirthday" v-on:click="showaddform = !showaddform">
         add
-        </span>
+      </span>
       <h1>{{ title }}</h1>
       <div id="searchbar" class="my-4">
         <span class="d-flex align-items-center">
           <span class="material-icons" style="color: #a3a3a3;">
             search
-            </span>
+          </span>
           <input v-model="whosearch" type="text" id="search" class="form-control"
-        v-bind:placeholder="searchplaceholder" />
+            v-bind:placeholder="searchplaceholder" />
         </span>
-        
+
       </div>
-      
+
       <ul class="list-group-home">
         <li v-for="(birthday , index) in filteredListPeople"
           @click="getinformations(birthday.id),showdetails = !showdetails" class="listp" :key="birthday.id">
@@ -39,16 +42,18 @@
           </div>
           <div class="userinfo">
             <span class="peoplename">{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
-            <span v-if="birthday.dateleft == '0'   ">{{next(birthday.yourage)}} <span v-if="birthday.yourage <=1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span> aujourd'hui</span>
+            <span v-if="birthday.dateleft == '0'   ">{{next(birthday.yourage)}} <span
+                v-if="birthday.yourage <=1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span> aujourd'hui</span>
             <span v-else>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
           </div>
-          <div class="dayleft"  v-if="birthday.dateleft == '0'   " style="display:flex; align-items:center;">
+          <div class="dayleft" v-if="birthday.dateleft == '0'   " style="display:flex; align-items:center;">
             <span class="material-icons">
               celebration
-              </span>
+            </span>
           </div>
           <div class="dayleft" v-else>
-            {{ birthday.yourage}} <span v-if="birthday.yourage == 1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span>
+            {{ birthday.yourage}} <span v-if="birthday.yourage == 1 ">an</span><span
+              v-if="birthday.yourage > 1 ">ans</span>
           </div>
         </li>
       </ul>
@@ -62,19 +67,30 @@
         <form v-on:submit.prevent>
           <div class="form-group">
             <label for="firstname">Prénom</label>
-            <input v-model="firstname" type="text" id="firstname" class="form-control"
-              placeholder="Saisier un prénom" />
+            <input v-model="firstname" type="text" id="firstname" class="form-control" placeholder="Saisir un prénom" />
           </div>
 
           <div class="form-group">
             <label for="name">Nom</label>
-            <input v-model="lastname" type="text" id="name" class="form-control" placeholder="Saisier un nom" />
+            <input v-model="lastname" type="text" id="name" class="form-control" placeholder="Saisir un nom" />
           </div>
           <div class="form-group">
             <label for="bdate">Date de naissance</label>
-            <input v-model="date" type="date" id="bdate" placeholder=""
-              class="form-control" />
+            <input v-model="date" type="date" id="bdate" placeholder="" class="form-control" />
           </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input v-model="email" type="text" id="email" class="form-control" placeholder="Saisir un email" />
+          </div>
+
+          <div class="form-group">
+            <label for="phonenumber">Nom</label>
+            <input v-model="phonenumber" type="text" id="phonenumber" class="form-control"
+              placeholder="Saisir un numéro de téléphone" />
+          </div>
+
+
           <div class="form-group">
             <label for="picture">Photo</label>
             <input type="file" style="display: none" @change="onFileSelected" ref="fileInput" id="toto" />
@@ -106,7 +122,7 @@
             <div class="userinfos">
               <h2>{{ firstname }} {{ lastname }}</h2>
               <span><span class="material-icons">
-                cake
+                  cake
                 </span>{{ dateformated }} </span><br />
               <span>{{ aged+1 }} ans dans </span>
             </div>
@@ -117,21 +133,27 @@
           <div class="detailpicture">
             <img :src="picture" />
           </div>
+          <div class="contact">
+            <a href="sms:/* phone number here */&body=/* body text here */">Link</a>
+            <a
+              :href="`sms:${phonenumber}&body=Bonjour ${firstname} je te souhaite un joyeux anniversaire!!!`">{{phonenumber}}</a>
+
+          </div>
           <div class="detailbody">
             <div id="searchbar">
-            <span class="d-flex align-items-center">
-              <span class="material-icons" style="color: #a3a3a3;">
-                search
+              <span class="d-flex align-items-center">
+                <span class="material-icons" style="color: #a3a3a3;">
+                  search
                 </span>
                 <input v-model="whatsearch" type="text" id="search" class="form-control searchgift"
-              placeholder="Rechercher un cadeau" />
-            </span>
-          </div>
+                  placeholder="Rechercher un cadeau" />
+              </span>
+            </div>
 
 
 
 
-       
+
             <ul class="list-group">
               <li v-for="gift in filteredList" class="giftli">
                 <span class="dot"></span><span class="giftname">{{ gift.gift }} </span><span
@@ -166,7 +188,7 @@
 
             <div class="form-group">
               <label for="gift">Cadeau</label>
-              <input v-model="gift" type="text" id="gift" class="form-control" placeholder="Saisier un nom" />
+              <input v-model="gift" type="text" id="gift" class="form-control" placeholder="Saisir un nom" />
             </div>
 
 
@@ -187,7 +209,14 @@
   </div>
 
   <script src="./script/vue.js"></script>
+  <script type="module">
 
+
+    import 'https://cdn.jsdelivr.net/npm/@pwabuilder/pwaupdate';
+    
+    const el = document.createElement('pwa-update');
+    document.body.appendChild(el);
+        </script>
 </body>
 
 </html>

@@ -192,6 +192,12 @@ const content = new Vue({
           b = new Date(y.date);
         return b - a;
       });
+      for (var i = 0; i < this.birthdaygift.length; i++) {
+        if (this.birthdaygift[i].id != i) {
+          this.birthdaygift[i].id = i;
+        }
+      }
+      localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
     },
     getinformations: function (who) {
       this.firstname = this.birthdaylist[who].firstname,

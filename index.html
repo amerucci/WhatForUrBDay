@@ -44,7 +44,8 @@
             <span class="peoplename">{{ birthday.firstname }} {{ birthday.lastname }} </span><br />
             <span v-if="birthday.dateleft == '0'   ">{{(birthday.yourage)}} <span
                 v-if="birthday.yourage <=1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span> aujourd'hui</span>
-            <span v-else>{{next(birthday.yourage)}} ans dans {{ birthday.dateleft}} jours</span><br />
+            <span v-else>{{next(birthday.yourage)}}  <span
+              v-if="birthday.yourage <=1 ">an</span><span v-if="birthday.yourage > 1 ">ans</span> dans {{ birthday.dateleft}} jours</span><br />
           </div>
           <div class="dayleft" v-if="birthday.dateleft == '0'   " style="display:flex; align-items:center;">
             <span class="material-icons ">
@@ -80,12 +81,7 @@
           </div>
 
           <div class="form-group">
-            <label for="email">Email</label>
-            <input v-model="email" type="text" id="email" class="form-control" placeholder="Saisir un email" />
-          </div>
-
-          <div class="form-group">
-            <label for="phonenumber">Nom</label>
+            <label for="phonenumber">Téléphone</label>
             <input v-model="phonenumber" type="text" id="phonenumber" class="form-control"
               placeholder="Saisir un numéro de téléphone" />
           </div>
@@ -124,14 +120,17 @@
               <span><span class="material-icons cakeicon">
                   cake
                 </span>{{ dateformated }} </span><br />
-              <span>{{ aged+1 }} ans dans </span>
+              <span>{{ aged+1 }} <span>
+                <span v-if="aged+1==1">an</span>
+                <span v-else>ans</span>
+              </span> dans </span>
             </div>
           </div>
           <div class="dayleft_detail">
             {{ daysleft }} jours
           </div>
           <div class="detailpicture">
-            <img :src="picture" />
+            <img :src="picturein" />
           </div>
           <div v-if="phonenumber != ''" class="contact">
             <a
@@ -178,7 +177,7 @@
 
           <div class="overlay"></div>
 
-          <div id="addgift" v-on:click="showaddformgift = !showaddformgift">
+          <div id="addgift" v-on:click="showaddformgift = !showaddformgift, dategenerator()">
             Ajouter un cadeau
           </div>
         </div>
@@ -195,8 +194,8 @@
             <div class="form-group">
               <label for="year">Année</label>
               <select v-model="year" class="form-control" id="year">
-
-                <option v-for="year in years">{{ year.date}}</option>
+                <option value="" disabled>Choisissez une année</option>
+               <option v-for="year in years">{{ year.date}}</option> -->
               </select>
             </div>
 
@@ -209,7 +208,7 @@
             <button type="submit" id="insertpeople" v-on:click="addagift">
               Ajouter
             </button>
-            <span class="closetxt" v-on:click="showaddformgift = !showaddformgift">Fermer</span>
+            <span class="closetxt" v-on:click="showaddformgift = !showaddformgift, reset()">Fermer</span>
           </form>
         </div>
 
@@ -223,6 +222,7 @@
   </div>
 
   <script src="./script/vue.js"></script>
+  <script src="./script/compress.js"></script>
   <script type="module">
 
 

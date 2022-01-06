@@ -30,9 +30,11 @@ const content = new Vue({
     showuser: false,
   },
   methods: {
+    //Prochain Age
     next: function (base) {
       return base + 1
     },
+    //Jours Restant jusqu'au prochain anniversaie 
     countdown: function (day) {
       const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
@@ -54,6 +56,7 @@ const content = new Vue({
       }
       return numberleft;
     },
+    //Calcul de l'age actuel
     age: function (day) {
       const thedate = day.split('-');
       var today = new Date();
@@ -68,6 +71,7 @@ const content = new Vue({
       }
       return age
     },
+    //Formatage de la date au format français
     formatdate: function () {
       const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
         "Juillet", "Août", "Spetembre", "Octobre", "Novembre", "Décembre"
@@ -78,32 +82,28 @@ const content = new Vue({
       var day = thedate[2]
       return day + " " + monthNames[mois - 1] + " " + an
     },
+    //Gestion de l'upload d'image, compression et enregistrement en base 64
     onFileSelected(event) {
       const compressor = new window.Compress();
       let reader = new FileReader();
-      reader.onload = function () {
-        
+      reader.onload = function () {  
       const files = [...event.target.files];
-      
       const results = compressor.compress(files, {
         size: 4,
         quality: 0.1,
-  
-      });
-      
+      });  
       results.then((value)=>{
         let image = value
         let theimg = "data:image/jpeg;base64,"+image[0].data
         localStorage.setItem("images", JSON.stringify(theimg));
-      }
-      )
-     
+      })
       };
       if (event.target.files[0]) {
         reader.readAsDataURL(event.target.files[0]);
         localStorage.removeItem("images");
       }
     },
+    //Génération automatique des dates pour la liste de choix dans la partie offrir un cadeau
     dategenerator: function () {
       this.years = []
       const thedate = this.date.split('-');
@@ -114,6 +114,7 @@ const content = new Vue({
         })
       }
     },
+    //Ajouter un cadeau
     addagift: function () {
       this.showaddformgift = false,
         this.update = true;
@@ -121,11 +122,13 @@ const content = new Vue({
           date: this.year,
           gift: this.gift
         }),
+        //Tri du tableau en fontion du critère choisi
         this.birthdaygift.sort(function (x, y) {
           let a = new Date(x.date),
             b = new Date(y.date);
           return b - a;
         });
+        //Réinitialisation des indexs du tableau
         for (var i = 0; i < this.birthdaygift.length; i++) {
           if (this.birthdaygift[i].id != i) {
             this.birthdaygift[i].id = i;
@@ -136,10 +139,12 @@ const content = new Vue({
       this.birthdaylist[this.choice].push(this.birthdaygift)
       this.years=""
     },
+    //Génération des id
     generateid: function () {
       length = this.birthdaylist.length
       return length
     },
+    //Ajouter un membre
     addamemember: function () {
       this.birthdaylist.push({
         id: this.generateid(),
@@ -168,12 +173,13 @@ const content = new Vue({
         this.reset(),
         localStorage.removeItem("images");
     },
+    //Supprimer un membre
     deleteMember() {
       who = this.choice
       this.birthdaylist.splice(who, 1)
       this.birthdaylist.sort(function (x, y) {
-        let a = new Date(x.date),
-          b = new Date(y.date);
+        let a = new Date(x.dateleft),
+          b = new Date(y.dateleft);
         return a - b;
       });
       for (var i = 0; i < this.birthdaylist.length; i++) {
@@ -183,6 +189,7 @@ const content = new Vue({
       }
       localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
     },
+    //Supprimer un cadeau
     deleteGift(index){
       alert("Voous allez supprimer ce cadeau "+index)
      
@@ -199,6 +206,7 @@ const content = new Vue({
       }
       localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
     },
+    //Récupérer les informations de la personne cliquée
     getinformations: function (who) {
       this.firstname = this.birthdaylist[who].firstname,
         this.lastname = this.birthdaylist[who].lastname,
@@ -212,14 +220,17 @@ const content = new Vue({
       this.choice = who,
         this.dateformated = this.formatdate()
     },
+    //Vider un tableau
     emptyArray: function () {
       this.birthdaydetails.pop()
     },
+    //Réinitialisation de toutes les valeus du formulaire
     reset: function () {
       this.firstname = '',
         this.lastname = '',
         this.date = '',
         this.picture = '',
+        this.phonenumber = '',
         this.year=''
         
     },

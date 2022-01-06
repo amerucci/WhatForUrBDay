@@ -200,7 +200,7 @@ label {
 }
 
 ul.list-group {
-    height: 30%;
+    height: 26%;
     overflow-y: auto;
     /* background: #FF9900; */
 }
@@ -366,11 +366,12 @@ span.giftdate {
     float: right;
     color: #245faf;
     font-weight: bold;
+    display: flex;
 }
 
 span.giftname {
     /* background: #FF9900; */
-    width: 86%;
+    width: 78%;
     float: left;
     padding-left: 25px;
 }
@@ -409,7 +410,7 @@ button#picture {
     margin-top: -25px;
     z-index: 1;
     position: relative;
-    font-size: 25px;
+    font-size: 20px;
     background: linear-gradient(90deg, rgba(36, 95, 175, 1) 0%, rgba(47, 135, 209, 1) 100%);
     text-align: center;
 }

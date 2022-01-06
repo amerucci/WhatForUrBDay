@@ -191,8 +191,6 @@ const content = new Vue({
     },
     //Supprimer un cadeau
     deleteGift(index){
-      alert("Voous allez supprimer ce cadeau "+index)
-     
       this.birthdaygift.splice(index, 1)
       this.birthdaygift.sort(function (x, y) {
         let a = new Date(x.date),

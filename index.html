@@ -120,14 +120,32 @@
               <span><span class="material-icons cakeicon">
                   cake
                 </span>{{ dateformated }} </span><br />
-              <span>{{ aged+1 }} <span>
-                <span v-if="aged+1==1">an</span>
-                <span v-else>ans</span>
-              </span> dans </span>
+
+                <span v-if="daysleft !=0">
+                  <span>{{ aged+1 }} <span>
+                    <span v-if="aged+1==1">an</span>
+                    <span v-else>ans</span>
+                  </span> dans </span>
+                </span>
+
+                <span v-else>
+                  <span>{{ aged }} <span>
+                    <span v-if="aged==1">an</span>
+                    <span v-else>ans</span>
+                </span>
+
+
+
+              
+               
+              
             </div>
           </div>
-          <div class="dayleft_detail">
+          <div class="dayleft_detail" v-if="daysleft !=0">
             {{ daysleft }} jours
+          </div>
+          <div class="dayleft_detail" v-else>
+            Aujourd'hui
           </div>
           <div class="detailpicture">
             <img :src="picturein" />
@@ -141,7 +159,7 @@
               </span>
               </a>
             <a
-              :href="`sms:${phonenumber}?&body=Coucou ${firstname} je te souhaite un joyeux anniversaire!!!`"><span class="material-icons icon smsicon">
+              :href="`sms:${phonenumber}?&body=Bonjour ${firstname} je te souhaite un joyeux anniversaire!!!`"><span class="material-icons icon smsicon">
                 sms
                 </span>
               
@@ -166,11 +184,17 @@
 
 
             <ul class="list-group">
-              <li v-for="(gift, index) in filteredList" class="giftli" v-on:dblclick="deleteGift(gift.id)">
+              <li v-for="(gift, index) in filteredList" class="giftli" >
                 <span class="material-icons dot">
                   card_giftcard
                   </span><span class="giftname">{{ gift.gift }} </span><span
-                  class="giftdate">{{ gift.date }}</span>
+                  class="giftdate">{{ gift.date }}
+                  <span class="material-icons"  v-on:click="deleteGift(gift.id)" v-bind:class="{ showaddform : showaddformgift } ">
+                    delete_outline
+                  </span>
+                  
+                
+                </span>
               </li>
             </ul>
           </div>

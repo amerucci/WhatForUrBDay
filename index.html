@@ -166,7 +166,7 @@
 
 
             <ul class="list-group">
-              <li v-for="gift in filteredList" class="giftli">
+              <li v-for="(gift, index) in filteredList" class="giftli" v-on:dblclick="deleteGift(gift.id)">
                 <span class="material-icons dot">
                   card_giftcard
                   </span><span class="giftname">{{ gift.gift }} </span><span

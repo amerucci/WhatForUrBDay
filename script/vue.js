@@ -121,6 +121,16 @@ const content = new Vue({
           date: this.year,
           gift: this.gift
         }),
+        this.birthdaygift.sort(function (x, y) {
+          let a = new Date(x.date),
+            b = new Date(y.date);
+          return b - a;
+        });
+        for (var i = 0; i < this.birthdaygift.length; i++) {
+          if (this.birthdaygift[i].id != i) {
+            this.birthdaygift[i].id = i;
+          }
+        }
         this.year = '',
         this.gift = ''
       this.birthdaylist[this.choice].push(this.birthdaygift)
@@ -172,6 +182,16 @@ const content = new Vue({
         }
       }
       localStorage.setItem('birthdaylist', JSON.stringify(this.birthdaylist))
+    },
+    deleteGift(index){
+      alert("Voous allez supprimer ce cadeau "+index)
+     
+      this.birthdaygift.splice(index, 1)
+      this.birthdaygift.sort(function (x, y) {
+        let a = new Date(x.date),
+          b = new Date(y.date);
+        return b - a;
+      });
     },
     getinformations: function (who) {
       this.firstname = this.birthdaylist[who].firstname,

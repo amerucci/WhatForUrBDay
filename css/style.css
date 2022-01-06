@@ -38,6 +38,8 @@ input[type="date"]
     /* min-width: 96%; */
 }
 
+input::-webkit-date-and-time-value{ text-align:left; }
+
 #addpe,
 #addgift {
     background: #42BDE3;
